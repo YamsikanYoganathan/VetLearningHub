@@ -13,6 +13,7 @@ export type NoteStatus = 'draft' | 'published';
 export interface Note {
   id: string;
   subject_id: string;
+  sub_section?: string | null; // Added per Task 4 CMS Upgrade
   title: string;
   slug: string;
   content: Record<string, any>; // JSONB representation of rich text or structured clinical data

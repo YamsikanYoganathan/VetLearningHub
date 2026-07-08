@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
-import { Inter, Lora } from "next/font/google";
+import { Inter_Tight, Aleo } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const interTight = Inter_Tight({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-inter-tight",
   display: "swap",
 });
 
-const lora = Lora({
+const aleo = Aleo({
   subsets: ["latin"],
-  variable: "--font-lora",
+  variable: "--font-aleo",
   display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "Veterinary Learning Hub | Clinical Reference & Protocols",
-  description: "A disciplined, clinical-grade knowledge base and reference platform for veterinary clinicians, surgeons, and medical students.",
+  description: "The definitive, clinical knowledge base for veterinary students and professionals. Access streamlined protocols, anatomical references, and pharmacological data instantly.",
 };
 
 export default function RootLayout({
@@ -25,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${lora.variable}`}>
-      <body className="font-sans bg-slate-50 text-slate-900 antialiased selection:bg-teal-600 selection:text-white min-h-screen flex flex-col">
+    <html lang="en" className={`${interTight.variable} ${aleo.variable}`} suppressHydrationWarning>
+      <body className="font-serif leading-[1.4] bg-slate-50 text-slate-900 antialiased selection:bg-sky-600 selection:text-white min-h-screen flex flex-col">
         {children}
       </body>
     </html>

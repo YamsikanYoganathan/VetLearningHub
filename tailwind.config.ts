@@ -9,25 +9,10 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Design system colors requested in Task 1
         brand: {
-          teal: "#0d9488", // teal-600
-          sky: "#0284c7",  // sky-600
+          sky: "#0284c7",  // sky-600 primary brand color
           light: "#f8fafc", // slate-50
           accentLight: "#f0f9ff", // sky-50
-        },
-        teal: {
-          50: "#f0fdfa",
-          100: "#ccfbf1",
-          200: "#99f6e4",
-          300: "#5eead4",
-          400: "#2dd4bf",
-          500: "#14b8a6",
-          600: "#0d9488",
-          700: "#0f766e",
-          800: "#115e59",
-          900: "#134e4a",
-          950: "#042f2e",
         },
         sky: {
           50: "#f0f9ff",
@@ -57,13 +42,13 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "sans-serif"],
-        serif: ["var(--font-lora)", "serif"],
-        display: ["var(--font-lora)", "serif"],
-        body: ["var(--font-inter)", "sans-serif"],
+        sans: ["var(--font-inter-tight)", "sans-serif"],
+        serif: ["var(--font-aleo)", "serif"],
+        display: ["var(--font-inter-tight)", "sans-serif"],
+        body: ["var(--font-aleo)", "serif"],
       },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography")],
 };
 export default config;

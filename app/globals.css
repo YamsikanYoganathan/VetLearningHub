@@ -3,12 +3,19 @@
 @tailwind utilities;
 
 @layer base {
+  /* CRITICAL TYPOGRAPHY UPDATE: All main body paragraphs and reading text MUST use Aleo (font-serif) with custom 1.4 line height */
   body {
-    @apply bg-slate-50 text-slate-900 font-sans antialiased;
+    @apply bg-slate-50 text-slate-900 font-serif leading-[1.4] antialiased;
   }
   
+  /* CRITICAL TYPOGRAPHY UPDATE: All headings, bold UI elements MUST use Inter Tight (font-sans) with default normal tracking */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif tracking-tight text-slate-900;
+    @apply font-sans font-bold text-slate-900 tracking-normal;
+  }
+
+  /* Standard readable paragraph spacing with exactly 1.4 line height and adequate bottom margin */
+  p {
+    @apply leading-[1.4] text-slate-600 mb-6;
   }
 }
 
