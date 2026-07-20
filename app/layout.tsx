@@ -15,7 +15,7 @@ const aleo = Aleo({
 });
 
 export const metadata: Metadata = {
-  title: "Veterinary Learning Hub | Clinical Reference & Protocols",
+  title: "Vet Learning Hub | Clinical Reference & Protocols",
   description: "The definitive, clinical knowledge base for veterinary students and professionals. Access streamlined protocols, anatomical references, and pharmacological data instantly.",
 };
 
@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${interTight.variable} ${aleo.variable}`} suppressHydrationWarning>
-      <body className="font-serif leading-[1.4] bg-slate-50 text-slate-900 antialiased selection:bg-sky-600 selection:text-white min-h-screen flex flex-col">
+      <body className="font-serif leading-[1.4] bg-slate-50 text-slate-900 antialiased selection:bg-sky-600 selection:text-white min-h-screen flex flex-col animate-fade-in">
         {children}
       </body>
     </html>

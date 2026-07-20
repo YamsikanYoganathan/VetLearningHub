@@ -92,7 +92,7 @@ export default async function NoteReadingPage({
 
         {/* Center Column: Main reading canvas */}
         <div className="lg:col-span-6 w-full">
-          <article className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 sm:p-8 lg:p-10 max-w-3xl mx-auto">
+          <article className="bg-white rounded-xl ring-1 ring-slate-200 shadow-sm p-8 md:p-12 max-w-3xl mx-auto">
             {/* Note Metadata Header */}
             <header className="border-b border-slate-100 pb-6 sm:pb-8 mb-6 sm:mb-8">
               <div className="flex items-center gap-2 sm:gap-3 flex-wrap mb-4">

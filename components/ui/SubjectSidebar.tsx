@@ -68,7 +68,7 @@ export function SubjectSidebar({ currentSubjectSlug = "canine-anatomy" }: Subjec
                   "group flex items-center justify-between px-3 py-2.5 rounded-xl text-xs sm:text-sm font-sans transition-all duration-150 tracking-normal",
                   isActive
                     ? "bg-sky-600 text-white font-semibold shadow-sm"
-                    : "text-slate-600 hover:bg-white hover:text-slate-900 hover:shadow-sm border border-transparent hover:border-slate-100"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
                 )}
               >
                 <div className="flex items-center gap-2.5 min-w-0">

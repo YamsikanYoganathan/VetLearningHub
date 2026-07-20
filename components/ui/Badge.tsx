@@ -11,11 +11,11 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
 
 // All variants mapped strictly to disciplined Sky Blue or neutral Slate per Task 2
 const variantStyles: Record<string, string> = {
-  sky: "bg-sky-50 text-sky-700 border-sky-200/80",
-  teal: "bg-sky-50 text-sky-700 border-sky-200/80",
-  amber: "bg-sky-50 text-sky-700 border-sky-200/80",
-  emerald: "bg-sky-50 text-sky-700 border-sky-200/80",
-  slate: "bg-slate-100 text-slate-700 border-slate-200",
+  sky: "bg-sky-50 text-sky-700 border-sky-100 ring-1 ring-sky-700/10",
+  teal: "bg-teal-50 text-teal-700 border-teal-100 ring-1 ring-teal-700/10",
+  amber: "bg-amber-50 text-amber-700 border-amber-100 ring-1 ring-amber-700/10",
+  emerald: "bg-emerald-50 text-emerald-700 border-emerald-100 ring-1 ring-emerald-700/10",
+  slate: "bg-slate-100 text-slate-700 border-slate-200 ring-1 ring-slate-700/10",
   outline: "bg-transparent text-slate-600 border-slate-300",
 };
 

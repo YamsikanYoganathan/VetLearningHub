@@ -32,7 +32,7 @@ export function SubjectCard({
   };
 
   const CardContent = (
-    <div className="group bg-white rounded-xl border border-slate-200 p-6 sm:p-8 shadow-sm hover:shadow-md hover:-translate-y-1 hover:border-teal-600 hover:ring-2 hover:ring-teal-600/30 transition-all duration-200 flex flex-col justify-between h-full cursor-pointer">
+    <div className="group bg-white rounded-xl border border-slate-200 p-6 sm:p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 hover:border-teal-600 hover:ring-2 hover:ring-teal-600/30 transition-all duration-300 ease-in-out flex flex-col justify-between h-full cursor-pointer">
       <div>
         <div className="flex items-start justify-between gap-4 mb-6">
           <div className="w-12 h-12 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center shadow-sm group-hover:scale-105 group-hover:bg-teal-600 group-hover:text-white transition-all duration-200">

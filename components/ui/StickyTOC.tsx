@@ -44,7 +44,7 @@ export function StickyTOC({ items, activeId }: StickyTOCProps) {
                 className={clsx(
                   "block py-1.5 pl-3 -ml-px border-l-2 transition-all leading-normal tracking-normal",
                   isActive
-                    ? "border-sky-600 text-sky-600 font-semibold bg-sky-50/50 rounded-r-md"
+                    ? "border-teal-600 text-teal-700 font-medium bg-teal-50/50 rounded-r-md"
                     : "border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-300"
                 )}
               >

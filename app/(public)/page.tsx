@@ -50,8 +50,9 @@ export default function PublicHomePage() {
   return (
     <div className="bg-slate-50 flex flex-col font-sans">
       {/* Hero Section: Generous whitespace py-16 sm:py-24, normal tracking, sky-600 palette per Task 1, 2, 3 */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white py-16 sm:py-24 border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="relative overflow-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-50 via-white to-slate-50 py-20 sm:py-32 border-b border-slate-100">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-50 border border-sky-200/80 text-sky-700 text-xs font-sans font-semibold uppercase tracking-normal mb-8 shadow-sm">
             <Activity className="w-3.5 h-3.5" />
             <span>Evidence-Based Clinical Reference</span>
@@ -69,8 +70,8 @@ export default function PublicHomePage() {
 
           {/* Functional Search Form routing to /search?q=query */}
           <form action="/search" method="GET" className="max-w-2xl mx-auto">
-            <div className="relative shadow-sm rounded-2xl bg-white border border-slate-200 ring-1 ring-slate-900/5 hover:border-sky-600 hover:ring-sky-600/20 transition-all duration-200 p-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-              <div className="pl-3.5 text-slate-400 hidden sm:flex items-center pointer-events-none">
+            <div className="relative shadow-md rounded-3xl bg-white border border-slate-200 ring-1 ring-slate-900/5 hover:border-sky-500 hover:ring-sky-500/20 transition-all duration-300 p-2.5 sm:p-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <div className="pl-4 text-slate-400 hidden sm:flex items-center pointer-events-none">
                 <Search className="w-5 h-5" />
               </div>
               <input
@@ -78,20 +79,78 @@ export default function PublicHomePage() {
                 name="q"
                 required
                 placeholder="Search notes... (e.g., Canine Valvular Disease, Feline T4)"
-                className="w-full py-3 px-3 text-slate-900 placeholder-slate-400 font-sans text-sm sm:text-base bg-transparent focus:outline-none tracking-normal"
+                className="w-full py-3 px-3 text-slate-900 placeholder-slate-400 font-sans text-base sm:text-lg bg-transparent focus:outline-none tracking-normal"
               />
               <button
                 type="submit"
-                className="px-6 py-3.5 bg-sky-600 hover:bg-sky-700 text-white font-sans font-bold text-sm sm:text-base rounded-xl shadow-sm transition-colors flex items-center justify-center gap-2 whitespace-nowrap tracking-normal"
+                className="px-8 py-4 bg-sky-600 hover:bg-sky-700 text-white font-sans font-bold text-base rounded-2xl shadow-md hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 whitespace-nowrap tracking-normal"
               >
-                <Search className="w-4 h-4 sm:hidden" />
+                <Search className="w-5 h-5 sm:hidden" />
                 <span>Search Notes</span>
               </button>
             </div>
-            <p className="font-serif text-xs text-slate-400 mt-3 mb-0 text-center leading-[1.4]">
+            <p className="font-serif text-sm text-slate-500 mt-4 mb-0 text-center leading-[1.4]">
               Enter any clinical symptom, drug formulary name, or anatomical structure to query the knowledge base.
             </p>
           </form>
+        </div>
+      </section>
+
+      {/* Task 5: "Why VetLearningHub?" Features Section */}
+      <section className="py-16 sm:py-24 bg-white border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <span className="text-xs font-sans font-bold text-teal-600 uppercase tracking-normal block mb-2">
+              The Standard of Care
+            </span>
+            <h2 className="font-sans font-bold text-2xl sm:text-4xl text-slate-900 tracking-normal">
+              Why VetLearningHub?
+            </h2>
+            <p className="font-serif text-base sm:text-lg text-slate-600 mt-4 leading-[1.4] mb-0">
+              Designed to eliminate cognitive friction in the clinic.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Feature 1 */}
+            <div className="group bg-white p-8 rounded-2xl border border-slate-200 ring-1 ring-slate-900/5 shadow-sm hover:shadow-md hover:-translate-y-1 hover:ring-teal-600/30 transition-all duration-300 ease-in-out">
+              <div className="bg-teal-50 text-teal-600 p-3.5 rounded-full inline-flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-teal-100 transition-all duration-300 shadow-sm ring-1 ring-teal-600/10">
+                <CheckCircle2 className="w-6 h-6" />
+              </div>
+              <h3 className="font-sans font-bold text-lg text-slate-900 mb-3 tracking-normal group-hover:text-teal-700 transition-colors">
+                Peer-Reviewed Clinical Notes
+              </h3>
+              <p className="font-serif text-sm text-slate-600 leading-[1.4] mb-0">
+                Every protocol and formulary entry is vetted by board-certified specialists to ensure uncompromising clinical rigor.
+              </p>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="group bg-white p-8 rounded-2xl border border-slate-200 ring-1 ring-slate-900/5 shadow-sm hover:shadow-md hover:-translate-y-1 hover:ring-sky-600/30 transition-all duration-300 ease-in-out">
+              <div className="bg-sky-50 text-sky-600 p-3.5 rounded-full inline-flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-sky-100 transition-all duration-300 shadow-sm ring-1 ring-sky-600/10">
+                <Activity className="w-6 h-6" />
+              </div>
+              <h3 className="font-sans font-bold text-lg text-slate-900 mb-3 tracking-normal group-hover:text-sky-700 transition-colors">
+                Any Device Access
+              </h3>
+              <p className="font-serif text-sm text-slate-600 leading-[1.4] mb-0">
+                Highly legible layouts optimized for mobile retrieval in the exam room or desktop review in the lecture hall.
+              </p>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="group bg-white p-8 rounded-2xl border border-slate-200 ring-1 ring-slate-900/5 shadow-sm hover:shadow-md hover:-translate-y-1 hover:ring-teal-600/30 transition-all duration-300 ease-in-out">
+              <div className="bg-teal-50 text-teal-600 p-3.5 rounded-full inline-flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-teal-100 transition-all duration-300 shadow-sm ring-1 ring-teal-600/10">
+                <Search className="w-6 h-6" />
+              </div>
+              <h3 className="font-sans font-bold text-lg text-slate-900 mb-3 tracking-normal group-hover:text-teal-700 transition-colors">
+                Fast Indexed Search
+              </h3>
+              <p className="font-serif text-sm text-slate-600 leading-[1.4] mb-0">
+                Instantly locate diseases, procedures, or medications with a smart global search engine built for speed.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 

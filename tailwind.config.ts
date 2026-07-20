@@ -40,12 +40,49 @@ const config: Config = {
           900: "#0f172a",
           950: "#020617",
         },
+        teal: {
+          50: "#f0fdfa",
+          100: "#ccfbf1",
+          200: "#99f6e4",
+          300: "#5eead4",
+          400: "#2dd4bf",
+          500: "#14b8a6",
+          600: "#0d9488",
+          700: "#0f766e",
+          800: "#115e59",
+          900: "#134e4a",
+          950: "#042f2e",
+        },
       },
       fontFamily: {
         sans: ["var(--font-inter-tight)", "sans-serif"],
         serif: ["var(--font-aleo)", "serif"],
         display: ["var(--font-inter-tight)", "sans-serif"],
         body: ["var(--font-aleo)", "serif"],
+      },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+      },
+      animation: {
+        "fade-in": "fadeIn 0.5s ease-in-out",
+      },
+      typography: {
+        DEFAULT: {
+          css: {
+            color: "#1e293b", // slate-800
+            lineHeight: "1.4",
+            p: {
+              lineHeight: "1.4",
+            },
+            h1: { color: "#0f172a" },
+            h2: { color: "#0f172a" },
+            h3: { color: "#0f172a" },
+            h4: { color: "#0f172a" },
+          },
+        },
       },
     },
   },

@@ -16,6 +16,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import Image from "next/image";
 
 export default function AdminLayout({
   children,
@@ -104,8 +105,8 @@ export default function AdminLayout({
       {/* Mobile Header Bar */}
       <div className="md:hidden bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between shadow-sm z-30">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-sky-600 flex items-center justify-center text-white font-bold shadow-sm">
-            <Cross className="w-4 h-4" />
+          <div className="w-8 h-8 rounded-xl overflow-hidden shadow-sm">
+            <Image src="/logo.svg" alt="Vet Learning Hub Logo" width={32} height={32} className="w-full h-full object-cover" />
           </div>
           <div>
             <span className="font-sans font-bold text-slate-900 block leading-none text-base">
@@ -133,9 +134,9 @@ export default function AdminLayout({
       >
         <div>
           {/* Desktop Brand Header */}
-          <div className="hidden md:flex h-16 px-6 items-center gap-3 border-b border-slate-200 bg-white/50">
-            <div className="w-8 h-8 rounded-xl bg-sky-600 flex items-center justify-center text-white font-bold shadow-sm">
-              <Cross className="w-4 h-4" />
+          <div className="hidden md:flex h-16 px-6 items-center gap-3 border-b border-slate-200 bg-white">
+            <div className="w-8 h-8 rounded-xl overflow-hidden shadow-sm">
+              <Image src="/logo.svg" alt="Vet Learning Hub Logo" width={32} height={32} className="w-full h-full object-cover" />
             </div>
             <div>
               <span className="font-sans font-bold text-slate-900 tracking-normal block leading-none text-base">
@@ -148,8 +149,8 @@ export default function AdminLayout({
           </div>
 
           {/* Navigation Links */}
-          <div className="p-4 space-y-1">
-            <div className="px-3 py-2 text-[11px] font-bold uppercase tracking-normal text-slate-400">
+          <div className="p-5 space-y-2">
+            <div className="px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">
               Clinical Management
             </div>
             <Link
@@ -157,11 +158,11 @@ export default function AdminLayout({
               onClick={() => setMobileMenuOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all tracking-normal ${
                 isOverview
-                  ? "bg-sky-50 text-sky-700 shadow-sm border border-sky-200/60"
+                  ? "bg-teal-50 text-teal-700 shadow-sm border border-teal-200/60"
                   : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
               }`}
             >
-              <LayoutDashboard className={`w-4 h-4 ${isOverview ? "text-sky-600" : "text-slate-400"}`} />
+              <LayoutDashboard className={`w-4 h-4 ${isOverview ? "text-teal-600" : "text-slate-400"}`} />
               <span>Overview</span>
             </Link>
             <Link
@@ -169,11 +170,11 @@ export default function AdminLayout({
               onClick={() => setMobileMenuOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all tracking-normal ${
                 isSubjects
-                  ? "bg-sky-50 text-sky-700 shadow-sm border border-sky-200/60"
+                  ? "bg-teal-50 text-teal-700 shadow-sm border border-teal-200/60"
                   : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
               }`}
             >
-              <BookOpen className={`w-4 h-4 ${isSubjects ? "text-sky-600" : "text-slate-400"}`} />
+              <BookOpen className={`w-4 h-4 ${isSubjects ? "text-teal-600" : "text-slate-400"}`} />
               <span>Subjects Catalog</span>
             </Link>
             <Link
@@ -181,11 +182,11 @@ export default function AdminLayout({
               onClick={() => setMobileMenuOpen(false)}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all tracking-normal ${
                 isNotes
-                  ? "bg-sky-50 text-sky-700 shadow-sm border border-sky-200/60"
+                  ? "bg-teal-50 text-teal-700 shadow-sm border border-teal-200/60"
                   : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
               }`}
             >
-              <FileText className={`w-4 h-4 ${isNotes ? "text-sky-600" : "text-slate-400"}`} />
+              <FileText className={`w-4 h-4 ${isNotes ? "text-teal-600" : "text-slate-400"}`} />
               <span>Clinical Notes</span>
             </Link>
           </div>
@@ -229,7 +230,7 @@ export default function AdminLayout({
           <div className="flex items-center gap-4 flex-shrink-0">
             <Link
               href="/admin/notes/new"
-              className="inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs sm:text-sm font-semibold shadow-sm transition-all tracking-normal"
+              className="inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs sm:text-sm font-semibold shadow-sm hover:shadow transition-all tracking-normal"
             >
               <PlusCircle className="w-4 h-4" />
               <span>Author Protocol</span>

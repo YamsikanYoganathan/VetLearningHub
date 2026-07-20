@@ -29,7 +29,7 @@ export function NoteRow({
   return (
     <Link
       href={href}
-      className="group block p-5 sm:p-6 rounded-xl border border-slate-100 bg-white hover:bg-slate-50 hover:border-sky-600/40 transition-all duration-150 shadow-sm hover:shadow-md"
+      className="group block p-5 sm:p-6 rounded-2xl border border-slate-200 ring-1 ring-slate-900/5 bg-white hover:bg-slate-50 hover:shadow-md hover:-translate-y-1 hover:ring-teal-600/30 transition-all duration-300 ease-in-out shadow-sm"
     >
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="space-y-2 flex-1 min-w-0">

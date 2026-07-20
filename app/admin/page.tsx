@@ -16,19 +16,19 @@ export default function AdminOverviewPage() {
         </div>
         <Link
           href="/admin/notes/new"
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-sans font-semibold text-sm shadow-sm transition-all flex-shrink-0 tracking-normal"
+          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-sans font-semibold text-sm shadow-sm hover:shadow transition-all flex-shrink-0 tracking-normal"
         >
           <PlusCircle className="w-4 h-4" />
           <span>Author Protocol</span>
         </Link>
       </div>
 
-      {/* Stats Grid - Sky Blue focus, normal tracking */}
+      {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-1 hover:border-teal-300 transition-all duration-300 ease-in-out cursor-default">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-sans font-bold text-slate-500 uppercase tracking-normal">Total Subjects</span>
-            <div className="w-9 h-9 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center shadow-sm">
+            <div className="w-9 h-9 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center shadow-sm">
               <BookOpen className="w-4 h-4" />
             </div>
           </div>
@@ -36,7 +36,7 @@ export default function AdminOverviewPage() {
           <span className="text-xs font-serif text-slate-600 mt-1 block leading-[1.4] mb-0">Active clinical disciplines</span>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-1 hover:border-teal-300 transition-all duration-300 ease-in-out cursor-default">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-sans font-bold text-slate-500 uppercase tracking-normal">Sub-sections</span>
             <div className="w-9 h-9 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center shadow-sm">
@@ -44,21 +44,21 @@ export default function AdminOverviewPage() {
             </div>
           </div>
           <div className="text-3xl font-sans font-bold text-slate-900 tracking-normal">24</div>
-          <span className="text-xs font-serif text-sky-600 font-medium mt-1 block leading-[1.4] mb-0">Anatomical & disease staging</span>
+          <span className="text-xs font-serif text-teal-600 font-medium mt-1 block leading-[1.4] mb-0">Anatomical & disease staging</span>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-1 hover:border-teal-300 transition-all duration-300 ease-in-out cursor-default">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-sans font-bold text-slate-500 uppercase tracking-normal">Published Notes</span>
-            <div className="w-9 h-9 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center shadow-sm">
+            <div className="w-9 h-9 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center shadow-sm">
               <CheckCircle2 className="w-4 h-4" />
             </div>
           </div>
           <div className="text-3xl font-sans font-bold text-slate-900 tracking-normal">56</div>
-          <span className="text-xs font-serif text-sky-600 font-medium mt-1 block leading-[1.4] mb-0">Publicly accessible via RLS</span>
+          <span className="text-xs font-serif text-teal-600 font-medium mt-1 block leading-[1.4] mb-0">Publicly accessible via RLS</span>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-1 hover:border-teal-300 transition-all duration-300 ease-in-out cursor-default">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-sans font-bold text-slate-500 uppercase tracking-normal">System Status</span>
             <div className="w-9 h-9 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center shadow-sm">
@@ -70,8 +70,8 @@ export default function AdminOverviewPage() {
         </div>
       </div>
 
-      {/* Recent Activity Table - Exact production titles and subjects per Task 4 */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+      {/* Recent Activity Table */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300">
         <div className="px-6 py-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <h2 className="font-sans font-bold text-slate-900 text-lg tracking-normal">
             Recently Modified Clinical Notes & Sub-sections

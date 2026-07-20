@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { Cross, Shield } from "lucide-react";
+import Image from "next/image";
+import { Shield } from "lucide-react";
 
 export function Footer() {
   return (
@@ -10,8 +11,8 @@ export function Footer() {
           {/* Brand & Mission */}
           <div className="md:col-span-2 space-y-4">
             <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-9 h-9 rounded-xl bg-sky-600 flex items-center justify-center text-white shadow-sm group-hover:bg-sky-500 transition-colors">
-                <Cross className="w-5 h-5" />
+              <div className="w-9 h-9 rounded-xl overflow-hidden flex-shrink-0">
+                <Image src="/logo.svg" alt="Vet Learning Hub Logo" width={36} height={36} className="w-full h-full object-cover" />
               </div>
               <div>
                 <span className="font-sans font-bold text-lg text-white tracking-normal block leading-none">
@@ -27,10 +28,10 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Quick Links - Exact 5 Subjects per Task 3 */}
+          {/* Quick Links / Resources */}
           <div className="space-y-3">
             <h4 className="font-sans font-bold text-xs uppercase tracking-normal text-white">
-              Clinical Disciplines
+              Resources
             </h4>
             <ul className="space-y-2 font-sans text-sm text-slate-400 tracking-normal">
               <li>
@@ -61,26 +62,23 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Administrative & Legal */}
+          {/* Legal & Admin */}
           <div className="space-y-3">
             <h4 className="font-sans font-bold text-xs uppercase tracking-normal text-white">
-              Platform & Governance
+              Legal & Access
             </h4>
             <ul className="space-y-2 font-sans text-sm text-slate-400 tracking-normal">
               <li>
-                <Link href="/admin" className="hover:text-sky-400 transition-colors flex items-center gap-1.5">
-                  <Shield className="w-3.5 h-3.5 text-sky-400" />
-                  <span>Admin Workbench</span>
+                <span className="text-slate-500 hover:text-sky-400 transition-colors cursor-pointer">Peer Review Standards</span>
+              </li>
+              <li>
+                <span className="text-slate-500 hover:text-sky-400 transition-colors cursor-pointer">Privacy Protocol</span>
+              </li>
+              <li className="pt-2">
+                <Link href="/admin" className="hover:text-teal-400 transition-colors flex items-center gap-1.5 text-sky-500">
+                  <Shield className="w-3.5 h-3.5" />
+                  <span>Admin Access</span>
                 </Link>
-              </li>
-              <li>
-                <span className="text-slate-500">Peer Review Standards</span>
-              </li>
-              <li>
-                <span className="text-slate-500">Formulary Guidelines</span>
-              </li>
-              <li>
-                <span className="text-slate-500">RLS Privacy Protocol</span>
               </li>
             </ul>
           </div>
@@ -88,12 +86,12 @@ export function Footer() {
 
         {/* Bottom copyright */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-sans text-slate-500 tracking-normal">
-          <p className="mb-0">© {new Date().getFullYear()} Veterinary Learning Hub. All clinical rights reserved.</p>
-          <div className="flex items-center gap-2">
-            <span>Designed with Inter Tight & Aleo typography</span>
-            <span>•</span>
-            <span className="text-sky-400 font-medium">Clinical Rigor Verified</span>
-          </div>
+          <p className="mb-0">
+            © {new Date().getFullYear()} Veterinary Learning Hub. All rights reserved.
+          </p>
+          <p className="mb-0">
+            Made by <a href="https://yamsikanyoganathan.com" target="_blank" rel="noopener noreferrer" className="text-teal-400 hover:text-sky-400 hover:underline transition-all font-medium">Yamsikan Yoganathan</a>.
+          </p>
         </div>
       </div>
     </footer>
