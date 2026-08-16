@@ -1,0 +1,26 @@
+import React from "react";
+import { requireEditor } from "@/lib/supabase/rbac";
+import AdminSidebar from "./AdminSidebar";
+import AdminHeader from "./AdminHeader";
+
+export default async function AdminLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  // 1. Server-side Authentication & Authorization Boundary
+  // This physically blocks rendering of any child CMS components if unauthorized.
+  const { user, role } = await requireEditor();
+
+  return (
+    <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans text-slate-900">
+      <AdminSidebar role={role} email={user.email} />
+      <div className="flex-grow flex flex-col min-w-0">
+        <AdminHeader />
+        <main className="flex-grow p-6 sm:p-8 lg:p-10 overflow-y-auto bg-slate-50">
+          {children}
+        </main>
+      </div>
+    </div>
+  );
+}

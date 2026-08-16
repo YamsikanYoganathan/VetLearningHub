@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase/client";
+import { createClient } from "@/lib/supabase/client";
+const supabase = createClient();
 import { Cross, Lock, Mail, AlertCircle, ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 
