@@ -99,6 +99,8 @@ export function Footer() {
           <p>© {new Date().getFullYear()} Vetulan Service. All rights reserved.</p>
           <p className="max-w-md text-slate-400 sm:text-right">
             For academic study and educational reference only. Consult licensed clinical protocols and professional diagnostic guidance for clinical interventions.
+            <br />
+            Made By Yamsikan Yoganathan
           </p>
         </div>
       </div>
