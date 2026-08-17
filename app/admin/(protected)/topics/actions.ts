@@ -1,63 +1,110 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { requireAdmin } from "@/lib/supabase/rbac";
+import { requireAdmin, requireEditor } from "@/lib/supabase/rbac";
 import { revalidatePath } from "next/cache";
+import { TopicSchema } from "@/lib/validations";
+import { z } from "zod";
 
 export async function createTopic(formData: FormData) {
-  await requireAdmin();
+  await requireEditor();
   const supabase = await createClient();
 
-  const name = formData.get("name") as string;
-  const slug = formData.get("slug") as string;
-  const description = formData.get("description") as string;
-  const subject_id = formData.get("subject_id") as string;
-  const sort_order = formData.get("sort_order") ? parseInt(formData.get("sort_order") as string) : 0;
+  try {
+    const rawData = {
+      subject_id: formData.get("subject_id"),
+      name: formData.get("name"),
+      slug: formData.get("slug"),
+      description: formData.get("description"),
+      sort_order: formData.get("sort_order"),
+      is_active: formData.get("is_active") === "true",
+    };
 
-  const { error } = await supabase.from("topics").insert({
-    name,
-    slug,
-    description,
-    subject_id,
-    sort_order,
-  });
+    const parsed = TopicSchema.parse(rawData);
 
-  if (error) {
-    return { error: error.message };
+    // Hierarchy check
+    const { data: subjectCheck, error: subjectError } = await supabase
+      .from("subjects")
+      .select("id")
+      .eq("id", parsed.subject_id)
+      .single();
+    if (subjectError || !subjectCheck) return { error: "Invalid subject." };
+
+    const { error } = await supabase.from("topics").insert({
+      subject_id: parsed.subject_id,
+      name: parsed.name,
+      slug: parsed.slug,
+      description: parsed.description || null,
+      sort_order: parsed.sort_order,
+      is_active: parsed.is_active,
+    });
+
+    if (error) {
+      if (error.code === '23505') return { error: "A topic with this slug already exists." };
+      return { error: error.message };
+    }
+
+    revalidatePath("/admin/topics");
+    revalidatePath("/", "layout");
+    revalidatePath("/subjects");
+    return { success: true };
+  } catch (err: any) {
+    if (err instanceof z.ZodError) {
+      return { error: (err as any).errors[0].message };
+    }
+    return { error: "An unexpected error occurred." };
   }
-
-  revalidatePath("/admin/topics");
-  revalidatePath("/");
-  revalidatePath("/subjects");
-  return { success: true };
 }
 
 export async function updateTopic(id: string, formData: FormData) {
-  await requireAdmin();
+  await requireEditor();
   const supabase = await createClient();
 
-  const name = formData.get("name") as string;
-  const slug = formData.get("slug") as string;
-  const description = formData.get("description") as string;
-  const subject_id = formData.get("subject_id") as string;
-  const sort_order = formData.get("sort_order") ? parseInt(formData.get("sort_order") as string) : 0;
+  try {
+    const rawData = {
+      subject_id: formData.get("subject_id"),
+      name: formData.get("name"),
+      slug: formData.get("slug"),
+      description: formData.get("description"),
+      sort_order: formData.get("sort_order"),
+      is_active: formData.get("is_active") === "true",
+    };
 
-  const { error } = await supabase.from("topics").update({
-    name,
-    slug,
-    description,
-    subject_id,
-    sort_order,
-  }).eq("id", id);
+    const parsed = TopicSchema.parse(rawData);
 
-  if (error) {
-    return { error: error.message };
+    // Hierarchy check
+    const { data: subjectCheck, error: subjectError } = await supabase
+      .from("subjects")
+      .select("id")
+      .eq("id", parsed.subject_id)
+      .single();
+    if (subjectError || !subjectCheck) return { error: "Invalid subject." };
+
+    const { error } = await supabase.from("topics").update({
+      subject_id: parsed.subject_id,
+      name: parsed.name,
+      slug: parsed.slug,
+      description: parsed.description || null,
+      sort_order: parsed.sort_order,
+      is_active: parsed.is_active,
+      updated_at: new Date().toISOString()
+    }).eq("id", id);
+
+    if (error) {
+      if (error.code === '23505') return { error: "A topic with this slug already exists." };
+      return { error: error.message };
+    }
+
+    revalidatePath("/admin/topics");
+    revalidatePath("/", "layout");
+    revalidatePath("/subjects");
+    return { success: true };
+  } catch (err: any) {
+    if (err instanceof z.ZodError) {
+      return { error: (err as any).errors[0].message };
+    }
+    return { error: "An unexpected error occurred." };
   }
-
-  revalidatePath("/admin/topics");
-  revalidatePath("/");
-  revalidatePath("/subjects");
-  return { success: true };
 }
 
 export async function deleteTopic(id: string) {
@@ -71,7 +118,7 @@ export async function deleteTopic(id: string) {
   }
 
   revalidatePath("/admin/topics");
-  revalidatePath("/");
+  revalidatePath("/", "layout");
   revalidatePath("/subjects");
   return { success: true };
 }

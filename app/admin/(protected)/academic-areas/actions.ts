@@ -1,59 +1,90 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { requireAdmin } from "@/lib/supabase/rbac";
+import { requireAdmin, requireEditor } from "@/lib/supabase/rbac";
 import { revalidatePath } from "next/cache";
+import { AcademicAreaSchema } from "@/lib/validations";
+import { z } from "zod";
 
 export async function createAcademicArea(formData: FormData) {
-  await requireAdmin();
+  await requireEditor();
   const supabase = await createClient();
 
-  const name = formData.get("name") as string;
-  const slug = formData.get("slug") as string;
-  const description = formData.get("description") as string;
-  const sort_order = formData.get("sort_order") ? parseInt(formData.get("sort_order") as string) : 0;
+  try {
+    const rawData = {
+      name: formData.get("name"),
+      slug: formData.get("slug"),
+      description: formData.get("description"),
+      sort_order: formData.get("sort_order"),
+      is_active: formData.get("is_active") === "true",
+    };
 
-  const { error } = await supabase.from("academic_areas").insert({
-    name,
-    slug,
-    description,
-    sort_order,
-  });
+    const parsed = AcademicAreaSchema.parse(rawData);
 
-  if (error) {
-    return { error: error.message };
+    const { error } = await supabase.from("academic_areas").insert({
+      name: parsed.name,
+      slug: parsed.slug,
+      description: parsed.description || null,
+      sort_order: parsed.sort_order,
+      is_active: parsed.is_active,
+    });
+
+    if (error) {
+      if (error.code === '23505') return { error: "An area with this slug already exists." };
+      return { error: error.message };
+    }
+
+    revalidatePath("/admin/academic-areas");
+    revalidatePath("/", "layout");
+    revalidatePath("/subjects");
+    return { success: true };
+  } catch (err: any) {
+    if (err instanceof z.ZodError) {
+      return { error: (err as any).errors[0].message };
+    }
+    return { error: "An unexpected error occurred." };
   }
-
-  revalidatePath("/admin/academic-areas");
-  revalidatePath("/");
-  revalidatePath("/subjects");
-  return { success: true };
 }
 
 export async function updateAcademicArea(id: string, formData: FormData) {
-  await requireAdmin();
+  await requireEditor();
   const supabase = await createClient();
 
-  const name = formData.get("name") as string;
-  const slug = formData.get("slug") as string;
-  const description = formData.get("description") as string;
-  const sort_order = formData.get("sort_order") ? parseInt(formData.get("sort_order") as string) : 0;
+  try {
+    const rawData = {
+      name: formData.get("name"),
+      slug: formData.get("slug"),
+      description: formData.get("description"),
+      sort_order: formData.get("sort_order"),
+      is_active: formData.get("is_active") === "true",
+    };
 
-  const { error } = await supabase.from("academic_areas").update({
-    name,
-    slug,
-    description,
-    sort_order,
-  }).eq("id", id);
+    const parsed = AcademicAreaSchema.parse(rawData);
 
-  if (error) {
-    return { error: error.message };
+    const { error } = await supabase.from("academic_areas").update({
+      name: parsed.name,
+      slug: parsed.slug,
+      description: parsed.description || null,
+      sort_order: parsed.sort_order,
+      is_active: parsed.is_active,
+      updated_at: new Date().toISOString()
+    }).eq("id", id);
+
+    if (error) {
+      if (error.code === '23505') return { error: "An area with this slug already exists." };
+      return { error: error.message };
+    }
+
+    revalidatePath("/admin/academic-areas");
+    revalidatePath("/", "layout");
+    revalidatePath("/subjects");
+    return { success: true };
+  } catch (err: any) {
+    if (err instanceof z.ZodError) {
+      return { error: (err as any).errors[0].message };
+    }
+    return { error: "An unexpected error occurred." };
   }
-
-  revalidatePath("/admin/academic-areas");
-  revalidatePath("/");
-  revalidatePath("/subjects");
-  return { success: true };
 }
 
 export async function deleteAcademicArea(id: string) {
@@ -67,7 +98,7 @@ export async function deleteAcademicArea(id: string) {
   }
 
   revalidatePath("/admin/academic-areas");
-  revalidatePath("/");
+  revalidatePath("/", "layout");
   revalidatePath("/subjects");
   return { success: true };
 }

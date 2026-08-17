@@ -1,41 +1,57 @@
 import React from "react";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | Vetulan Service",
-  description: "Terms of service and usage conditions for Vetulan Service.",
+  title: "Terms of Reference | Vetulan Service",
+  description:
+    "Terms of reference, educational scope, and clinical disclaimers for Vetulan Service.",
 };
 
 export default function TermsPage() {
   return (
-    <div className="container-page py-12 md:py-20 max-w-3xl">
-      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground tracking-tight mb-8">
-        Terms of Service
-      </h1>
-      <div className="prose prose-slate dark:prose-invert max-w-none">
-        <p className="text-sm text-muted-foreground mb-8">Last updated: August 2026</p>
-        <h2>1. Agreement to Terms</h2>
-        <p>
-          By viewing or using this website, which can be accessed at www.vetulanservice.com, you are agreeing to be bound by these Website Terms and Conditions of Use and agree that you are responsible for the agreement with any applicable local laws.
+    <div className="container-page py-10 sm:py-14 max-w-3xl">
+      <Breadcrumb
+        items={[{ label: "Terms of Reference", isCurrent: true }]}
+        className="mb-8"
+      />
+
+      <div className="mb-10 pb-6 border-b border-slate-200">
+        <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight mb-2">
+          Terms of Reference
+        </h1>
+        <p className="text-xs font-mono uppercase tracking-wider text-slate-400">
+          Last updated: {new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
         </p>
-        <h2>2. Medical Disclaimer</h2>
-        <p>
-          The content on Vetulan Service is for educational and informational purposes only. It does not constitute professional veterinary advice, diagnosis, or treatment. Always seek the advice of a qualified veterinary provider with any questions you may have regarding a medical condition in an animal.
-        </p>
-        <h2>3. Intellectual Property Rights</h2>
-        <p>
-          Other than the content you own, under these Terms, Vetulan Service and/or its licensors own all the intellectual property rights and materials contained in this Website.
-        </p>
-        <h2>4. Restrictions</h2>
-        <p>
-          You are specifically restricted from all of the following:
-        </p>
-        <ul>
-          <li>publishing any Website material in any other media without prior attribution;</li>
-          <li>selling, sublicensing and/or otherwise commercializing any Website material;</li>
-          <li>using this Website in any way that is or may be damaging to this Website;</li>
-          <li>using this Website contrary to applicable laws and regulations.</li>
-        </ul>
+      </div>
+
+      <div className="space-y-8 text-sm sm:text-base text-slate-700 leading-relaxed">
+        <section>
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight mb-2">
+            1. Academic Scope & Clinical Non-Reliance
+          </h2>
+          <p>
+            The educational notes, clinical algorithms, diagnostic protocols, and surgical summaries published on Vetulan Service are compiled for academic instruction and study reference only. They do not constitute veterinary medical directives. Licensed clinicians and surgeons bear sole responsibility for clinical diagnosis, drug calculation, and patient care.
+          </p>
+        </section>
+
+        <section className="pt-6 border-t border-slate-200">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight mb-2">
+            2. Curriculum Attribution & Copyright
+          </h2>
+          <p>
+            All original structural organization, curriculum frameworks, and editorial summaries are proprietary to Vetulan Service and its authors, protected under applicable intellectual property laws and academic fair-use guidelines.
+          </p>
+        </section>
+
+        <section className="pt-6 border-t border-slate-200">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight mb-2">
+            3. Platform Reliability
+          </h2>
+          <p>
+            We maintain high standards for content accuracy and platform availability, but provide all materials on an &quot;as-is&quot; basis for academic exploration without express warranties.
+          </p>
+        </section>
       </div>
     </div>
   );

@@ -3,13 +3,14 @@
 import React, { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search as SearchIcon, X } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 export function SearchInput({ initialQuery = "" }: { initialQuery?: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [query, setQuery] = useState(initialQuery || searchParams.get("q") || "");
+  const [query, setQuery] = useState(
+    initialQuery || searchParams.get("q") || ""
+  );
 
   useEffect(() => {
     setQuery(searchParams.get("q") || "");
@@ -17,45 +18,50 @@ export function SearchInput({ initialQuery = "" }: { initialQuery?: string }) {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (query.trim()) {
-      router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+    const trimmed = query.trim();
+    const params = new URLSearchParams(searchParams.toString());
+    if (trimmed) {
+      params.set("q", trimmed);
     } else {
-      router.push(`/search`);
+      params.delete("q");
     }
+    params.delete("page");
+    router.push(`/search?${params.toString()}`);
   };
 
   const clearSearch = () => {
     setQuery("");
-    router.push(`/search`);
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("q");
+    params.delete("page");
+    router.push(`/search${params.toString() ? `?${params.toString()}` : ""}`);
   };
 
   return (
     <form onSubmit={handleSearch} className="relative w-full max-w-2xl mx-auto">
-      <div className="relative flex items-center w-full h-14 rounded-full border border-border bg-background px-4 overflow-hidden focus-within:ring-2 focus-within:ring-primary focus-within:border-primary transition-all shadow-sm">
-        <SearchIcon className="w-5 h-5 text-muted-foreground shrink-0" />
-        <Input
+      <div className="relative flex items-center w-full h-12 rounded-xl border border-slate-200 bg-white px-3.5 focus-within:ring-2 focus-within:ring-primary focus-within:border-transparent transition-all shadow-xs">
+        <SearchIcon
+          className="w-4 h-4 text-slate-400 shrink-0"
+          aria-hidden="true"
+        />
+        <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search veterinary protocols, subjects, or notes..."
-          className="flex-1 border-0 shadow-none focus-visible:ring-0 px-3 h-full text-base sm:text-lg bg-transparent"
+          placeholder="Search clinical topics, diseases, procedures, or pharmacology..."
+          className="flex-1 border-0 outline-none px-3 h-full text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 bg-transparent font-normal"
         />
         {query && (
-          <Button
+          <button
             type="button"
-            variant="ghost"
-            size="icon"
             onClick={clearSearch}
-            className="w-8 h-8 rounded-full text-muted-foreground hover:text-foreground shrink-0 -mr-1"
-            aria-label="Clear search"
+            className="p-1 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 shrink-0 transition-colors mr-1.5"
+            aria-label="Clear search query"
           >
             <X className="w-4 h-4" />
-          </Button>
+          </button>
         )}
-        <Button 
-          type="submit" 
-          className="ml-2 rounded-full h-9 px-4 shrink-0 font-medium hidden sm:flex"
-        >
+        <Button type="submit" size="sm" className="shrink-0 font-medium">
           Search
         </Button>
       </div>

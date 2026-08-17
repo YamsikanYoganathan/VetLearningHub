@@ -37,7 +37,7 @@ export default function Editor({ initialContent, onChange }: EditorProps) {
     editorProps: {
       attributes: {
         class:
-          "prose prose-slate max-w-none min-h-[400px] p-6 focus:outline-none focus:ring-0",
+          "prose prose-slate max-w-[65ch] mx-auto min-h-[420px] p-6 focus:outline-none focus:ring-0 leading-[1.75]",
       },
     },
     onUpdate: ({ editor }) => {
@@ -45,30 +45,21 @@ export default function Editor({ initialContent, onChange }: EditorProps) {
     },
   });
 
-  // Re-sync content if initialContent changes completely (e.g. loading a different note)
-  useEffect(() => {
-    if (editor && initialContent && !editor.isDestroyed) {
-      // Only set if editor is currently empty or if it's completely different
-      // To avoid cursor jumping, we only rely on initialContent for the very first load
-      // The parent shouldn't constantly update initialContent on every stroke.
-    }
-  }, [editor, initialContent]);
-
   if (!editor) {
     return (
-      <div className="w-full min-h-[400px] border border-slate-200 rounded-2xl bg-white flex items-center justify-center">
+      <div className="w-full min-h-[400px] border border-slate-200 rounded-xl bg-white flex items-center justify-center">
         <div className="animate-pulse flex flex-col items-center gap-2 text-slate-400">
-          <div className="w-8 h-8 border-4 border-slate-200 border-t-teal-500 rounded-full animate-spin"></div>
-          <span className="text-sm font-semibold">Loading editor...</span>
+          <div className="w-6 h-6 border-2 border-slate-200 border-t-sky-600 rounded-full animate-spin" />
+          <span className="text-xs font-medium">Initializing editor...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+    <div className="w-full bg-white border border-slate-200 rounded-xl shadow-xs overflow-hidden flex flex-col">
       <EditorToolbar editor={editor} />
-      <div className="flex-grow overflow-y-auto max-h-[800px] bg-white">
+      <div className="grow overflow-y-auto max-h-[800px] bg-white">
         <EditorContent editor={editor} />
       </div>
     </div>

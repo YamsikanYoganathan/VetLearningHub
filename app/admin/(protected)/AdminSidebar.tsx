@@ -2,20 +2,21 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { 
-  LayoutDashboard, 
-  BookOpen, 
-  FileText, 
-  Layers, 
-  Settings, 
-  Tags, 
-  LogOut, 
-  ChevronRight, 
-  Menu, 
+import {
+  LayoutDashboard,
+  BookOpen,
+  FileText,
+  Layers,
+  Tags,
+  LogOut,
+  ChevronRight,
+  Menu,
   X,
-  ShieldAlert
+  ExternalLink,
 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface AdminSidebarProps {
   role: "admin" | "editor";
@@ -32,136 +33,163 @@ export default function AdminSidebar({ role, email }: AdminSidebarProps) {
   const isTopics = pathname.startsWith("/admin/topics");
   const isNotes = pathname.startsWith("/admin/notes");
 
+  const navItems = [
+    {
+      label: "Overview",
+      href: "/admin",
+      icon: LayoutDashboard,
+      isActive: isOverview,
+    },
+    {
+      label: "Academic Areas",
+      href: "/admin/academic-areas",
+      icon: Layers,
+      isActive: isAreas,
+    },
+    {
+      label: "Subjects",
+      href: "/admin/subjects",
+      icon: BookOpen,
+      isActive: isSubjects,
+    },
+    {
+      label: "Topics",
+      href: "/admin/topics",
+      icon: Tags,
+      isActive: isTopics,
+    },
+    {
+      label: "Notes & Protocols",
+      href: "/admin/notes",
+      icon: FileText,
+      isActive: isNotes,
+    },
+  ];
+
   return (
     <>
-      {/* Mobile Header Toggle */}
-      <div className="md:hidden bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between shadow-sm z-30">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-teal-600 flex items-center justify-center text-white font-bold">
-            V
-          </div>
-          <div>
-            <span className="font-bold text-slate-900 block leading-none text-base">VetLearnHub</span>
-            <span className="text-[10px] font-semibold text-teal-600 uppercase block mt-0.5">Admin CMS</span>
-          </div>
-        </div>
+      {/* Mobile Sticky Top Header */}
+      <div className="md:hidden bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between shadow-xs sticky top-0 z-30">
+        <Link href="/admin" className="flex items-center gap-2">
+          <Image
+            src="/logo-desktop.svg"
+            alt="Vetulan Service"
+            width={120}
+            height={40}
+            className="h-8 w-auto"
+            priority
+          />
+          <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded border border-slate-200">
+            CMS
+          </span>
+        </Link>
         <button
+          type="button"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="p-2 rounded-xl bg-slate-100 text-slate-700"
+          className="p-1.5 rounded-md text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          aria-label={mobileMenuOpen ? "Close sidebar menu" : "Open sidebar menu"}
+          aria-expanded={mobileMenuOpen}
         >
-          {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          {mobileMenuOpen ? (
+            <X className="w-5 h-5" />
+          ) : (
+            <Menu className="w-5 h-5" />
+          )}
         </button>
       </div>
 
+      {/* Main Desktop & Collapsible Mobile Sidebar */}
       <aside
-        className={`${
-          mobileMenuOpen ? "flex" : "hidden"
-        } md:flex w-full md:w-64 bg-slate-50 flex-col justify-between border-b md:border-b-0 md:border-r border-slate-200 flex-shrink-0 z-20 sticky top-0 h-screen`}
+        id="cms-tour-sidebar"
+        className={`${mobileMenuOpen ? "flex" : "hidden"
+          } md:flex w-full md:w-64 bg-slate-50/90 flex-col justify-between border-b md:border-b-0 md:border-r border-slate-200 shrink-0 z-20 md:sticky md:top-0 md:h-screen`}
       >
         <div className="overflow-y-auto">
-          {/* Desktop Brand */}
-          <div className="hidden md:flex h-16 px-6 items-center gap-3 border-b border-slate-200 bg-white">
-            <div className="w-8 h-8 rounded-xl bg-teal-600 flex items-center justify-center text-white font-bold">
-              V
-            </div>
-            <div>
-              <span className="font-bold text-slate-900 block leading-none text-base">VetLearnHub</span>
-              <span className="text-[10px] font-semibold text-teal-600 uppercase block mt-1">Admin CMS</span>
-            </div>
+          {/* Desktop Brand Header */}
+          <div className="hidden md:flex h-16 px-6 items-center justify-between border-b border-slate-200 bg-white">
+            <Link href="/admin" className="flex items-center gap-2.5">
+              <Image
+                src="/logo-desktop.svg"
+                alt="Vetulan Service"
+                width={140}
+                height={35}
+                className="h-7 w-auto"
+                priority
+              />
+            </Link>
+            <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-700 border border-slate-200/80 px-1.5 py-0.5 rounded">
+              CMS
+            </span>
           </div>
 
-          <div className="p-4 space-y-1">
-            <div className="px-3 py-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">Dashboard</div>
-            <Link
-              href="/admin"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                isOverview ? "bg-teal-50 text-teal-700 shadow-sm border border-teal-200/60" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-              }`}
-            >
-              <LayoutDashboard className={`w-4 h-4 ${isOverview ? "text-teal-600" : "text-slate-400"}`} />
-              <span>Overview</span>
-            </Link>
+          {/* Navigation Links */}
+          <div className="p-3 sm:p-4 space-y-1">
+            <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              Workspace
+            </div>
 
-            <div className="px-3 pt-4 pb-2 text-[11px] font-bold uppercase tracking-wider text-slate-400">Content</div>
-            
-            {role === "admin" && (
-              <>
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              return (
                 <Link
-                  href="/admin/academic-areas"
+                  key={item.href}
+                  href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                    isAreas ? "bg-teal-50 text-teal-700 shadow-sm border border-teal-200/60" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-                  }`}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${item.isActive
+                    ? "bg-sky-50 text-sky-800 font-semibold border border-sky-100"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                    }`}
                 >
-                  <Layers className={`w-4 h-4 ${isAreas ? "text-teal-600" : "text-slate-400"}`} />
-                  <span>Academic Areas</span>
+                  <Icon
+                    className={`w-4 h-4 ${item.isActive ? "text-primary" : "text-slate-400"
+                      }`}
+                  />
+                  <span>{item.label}</span>
                 </Link>
-                <Link
-                  href="/admin/subjects"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                    isSubjects ? "bg-teal-50 text-teal-700 shadow-sm border border-teal-200/60" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-                  }`}
-                >
-                  <BookOpen className={`w-4 h-4 ${isSubjects ? "text-teal-600" : "text-slate-400"}`} />
-                  <span>Subjects</span>
-                </Link>
-                <Link
-                  href="/admin/topics"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                    isTopics ? "bg-teal-50 text-teal-700 shadow-sm border border-teal-200/60" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-                  }`}
-                >
-                  <Tags className={`w-4 h-4 ${isTopics ? "text-teal-600" : "text-slate-400"}`} />
-                  <span>Topics</span>
-                </Link>
-              </>
-            )}
-
-            <Link
-              href="/admin/notes"
-              onClick={() => setMobileMenuOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                isNotes ? "bg-teal-50 text-teal-700 shadow-sm border border-teal-200/60" : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-              }`}
-            >
-              <FileText className={`w-4 h-4 ${isNotes ? "text-teal-600" : "text-slate-400"}`} />
-              <span>Notes</span>
-            </Link>
-
+              );
+            })}
           </div>
         </div>
 
-        <div className="p-4 border-t border-slate-200 bg-white/50 space-y-2">
-          <div className="px-3 py-2 mb-2 bg-slate-100 rounded-lg">
-            <p className="text-xs font-medium text-slate-800 truncate">{email}</p>
-            <p className="text-[10px] text-slate-500 uppercase tracking-wider flex items-center gap-1 mt-0.5">
-              {role === 'admin' && <ShieldAlert className="w-3 h-3 text-amber-500" />}
-              {role} role
-            </p>
-          </div>
-          
-          <form action="/auth/signout" method="post">
-            <button
-              type="submit"
-              className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold text-red-600 hover:bg-red-50 hover:text-red-700 transition-all border border-transparent hover:border-red-200"
+        {/* User Footer Profile & Actions */}
+        <div className="p-4 border-t border-slate-200 bg-white space-y-3">
+          <div className="px-3 py-2 bg-slate-50 rounded-lg border border-slate-200/80">
+            <p
+              className="text-xs font-semibold text-slate-800 truncate"
+              title={email}
             >
-              <span className="flex items-center gap-2">
+              {email}
+            </p>
+            <div className="flex items-center gap-2 mt-1">
+              <Badge variant={role === "admin" ? "primary" : "secondary"}>
+                {role.toUpperCase()}
+              </Badge>
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <Link
+              href="/"
+              target="_blank"
+              className="flex items-center justify-between w-full px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+            >
+              <span className="flex items-center gap-1.5">
+                <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+                <span>View Public Platform</span>
+              </span>
+              <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+            </Link>
+
+            <form action="/auth/signout" method="post">
+              <button
+                type="submit"
+                className="w-full flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-red-600 hover:bg-red-50 transition-colors text-left"
+              >
                 <LogOut className="w-3.5 h-3.5" />
                 <span>Sign Out</span>
-              </span>
-            </button>
-          </form>
-          
-          <Link
-            href="/"
-            className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-900 bg-slate-100/80 hover:bg-slate-100 transition-all"
-          >
-            <span>Public Hub</span>
-            <ChevronRight className="w-3.5 h-3.5" />
-          </Link>
+              </button>
+            </form>
+          </div>
         </div>
       </aside>
     </>

@@ -1,40 +1,57 @@
 import React from "react";
+import { Breadcrumb } from "@/components/ui/breadcrumb";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Vetulan Service",
-  description: "Privacy policy and data handling for Vetulan Service.",
+  description:
+    "Privacy policy and data protection governance for Vetulan Service.",
 };
 
 export default function PrivacyPage() {
   return (
-    <div className="container-page py-12 md:py-20 max-w-3xl">
-      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground tracking-tight mb-8">
-        Privacy Policy
-      </h1>
-      <div className="prose prose-slate dark:prose-invert max-w-none">
-        <p className="text-sm text-muted-foreground mb-8">Last updated: August 2026</p>
-        <p>
-          At Vetulan Service, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our platform.
+    <div className="container-page py-10 sm:py-14 max-w-3xl">
+      <Breadcrumb
+        items={[{ label: "Privacy Policy", isCurrent: true }]}
+        className="mb-8"
+      />
+
+      <div className="mb-10 pb-6 border-b border-slate-200">
+        <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight mb-2">
+          Privacy Policy
+        </h1>
+        <p className="text-xs font-mono uppercase tracking-wider text-slate-400">
+          Last updated: {new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
         </p>
-        <h2>1. Information We Collect</h2>
-        <p>
-          We may collect information about you in a variety of ways. The information we may collect on the Site includes:
-        </p>
-        <ul>
-          <li><strong>Personal Data:</strong> Personally identifiable information, such as your name, shipping address, email address, and telephone number, and demographic information.</li>
-          <li><strong>Derivative Data:</strong> Information our servers automatically collect when you access the Site, such as your IP address, your browser type, your operating system, your access times, and the pages you have viewed directly before and after accessing the Site.</li>
-        </ul>
-        <h2>2. Use of Your Information</h2>
-        <p>
-          Having accurate information about you permits us to provide you with a smooth, efficient, and customized experience. Specifically, we may use information collected about you via the Site to:
-        </p>
-        <ul>
-          <li>Create and manage your account.</li>
-          <li>Deliver targeted advertising, coupons, newsletters, and other information regarding promotions and the Site to you.</li>
-          <li>Email you regarding your account or order.</li>
-          <li>Fulfill and manage purchases, orders, payments, and other transactions related to the Site.</li>
-        </ul>
+      </div>
+
+      <div className="space-y-8 text-sm sm:text-base text-slate-700 leading-relaxed">
+        <section>
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight mb-2">
+            1. Open Reference Platform & Data Minimization
+          </h2>
+          <p>
+            Vetulan Service is structured as an open educational knowledge base. Readers can freely navigate published disciplines, subject modules, and clinical notes without registration, mandatory telemetry, or personal data tracking.
+          </p>
+        </section>
+
+        <section className="pt-6 border-t border-slate-200">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight mb-2">
+            2. Authentication & Editorial Session Management
+          </h2>
+          <p>
+            For authorized editors and administrators, session authentication is handled securely via Supabase Auth with encrypted HTTP-only session tokens. We do not place commercial tracking or analytics cookies on public reading routes.
+          </p>
+        </section>
+
+        <section className="pt-6 border-t border-slate-200">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight mb-2">
+            3. Infrastructure & Cryptographic Security
+          </h2>
+          <p>
+            All network communication is secured using TLS/HTTPS encryption. Administrative operations and database access are strictly isolated through PostgreSQL Row Level Security (RLS) policies.
+          </p>
+        </section>
       </div>
     </div>
   );

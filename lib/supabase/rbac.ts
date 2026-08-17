@@ -9,23 +9,30 @@ export type Role = "admin" | "editor";
  */
 export async function requireEditor() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (authError || !user) {
     redirect("/admin/login");
   }
 
-  const { data: roleData, error } = await supabase
-    .from("user_roles")
-    .select("role")
-    .eq("user_id", user.id)
-    .single();
+  const {
+    data: role,
+    error: roleError,
+  } = await supabase.rpc("get_my_role");
 
-  if (error || !roleData || (roleData.role !== "editor" && roleData.role !== "admin")) {
+  if (roleError) {
+    console.error("[RBAC] Failed to fetch user role via RPC:", roleError);
     redirect("/admin/unauthorized");
   }
 
-  return { user, role: roleData.role as Role };
+  if (role === "editor" || role === "admin") {
+    return { user, role: role as Role };
+  }
+
+  redirect("/admin/unauthorized");
 }
 
 /**
@@ -34,21 +41,28 @@ export async function requireEditor() {
  */
 export async function requireAdmin() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (authError || !user) {
     redirect("/admin/login");
   }
 
-  const { data: roleData, error } = await supabase
-    .from("user_roles")
-    .select("role")
-    .eq("user_id", user.id)
-    .single();
+  const {
+    data: role,
+    error: roleError,
+  } = await supabase.rpc("get_my_role");
 
-  if (error || !roleData || roleData.role !== "admin") {
+  if (roleError) {
+    console.error("[RBAC:Admin] Failed to fetch user role via RPC:", roleError);
     redirect("/admin/unauthorized");
   }
 
-  return { user, role: roleData.role as Role };
+  if (role === "admin") {
+    return { user, role: role as Role };
+  }
+
+  redirect("/admin/unauthorized");
 }

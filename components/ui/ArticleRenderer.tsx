@@ -12,6 +12,14 @@ interface JSONNode {
 
 export interface ArticleRendererProps {
   content: any;
+  className?: string;
+}
+
+// Security: Prevent XSS from javascript: URIs
+function isSafeUrl(url: string | undefined): boolean {
+  if (!url) return false;
+  const safeProtocols = /^(https?|mailto|tel):/i;
+  return url.startsWith("/") || url.startsWith("#") || safeProtocols.test(url);
 }
 
 // Utility to render marks (bold, italic, code, link)
@@ -20,33 +28,46 @@ function renderTextWithMarks(node: JSONNode, key: string) {
     return <React.Fragment key={key}>{node.text}</React.Fragment>;
   }
 
-  let element = <React.Fragment key={key}>{node.text}</React.Fragment>;
+  let element: React.ReactNode = <React.Fragment key={key}>{node.text}</React.Fragment>;
 
   // Apply marks from inside out
-  node.marks.forEach((mark) => {
+  node.marks.forEach((mark, markIndex) => {
+    const markKey = `${key}-mark-${markIndex}`;
     switch (mark.type) {
       case "bold":
-        element = <strong key={key}>{element}</strong>;
+        element = <strong key={markKey} className="font-bold text-slate-900">{element}</strong>;
         break;
       case "italic":
-        element = <em key={key}>{element}</em>;
+        element = <em key={markKey} className="italic text-slate-800">{element}</em>;
         break;
       case "strike":
-        element = <del key={key}>{element}</del>;
+        element = <del key={markKey} className="line-through text-slate-400">{element}</del>;
         break;
       case "code":
-        element = <code key={key}>{element}</code>;
+        element = (
+          <code key={markKey} className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[0.875em] text-slate-900 border border-slate-200/80">
+            {element}
+          </code>
+        );
         break;
       case "link":
-        const href = mark.attrs?.href || "#";
+        let href = mark.attrs?.href || "#";
+        if (!isSafeUrl(href)) {
+          href = "#";
+        }
         element = (
-          <a key={key} href={href} target={mark.attrs?.target} rel="noopener noreferrer">
+          <a
+            key={markKey}
+            href={href}
+            target={mark.attrs?.target || (href.startsWith("http") ? "_blank" : undefined)}
+            rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+            className="text-primary hover:underline underline-offset-4 font-medium transition-colors"
+          >
             {element}
           </a>
         );
         break;
       default:
-        // Unknown mark, just pass through
         break;
     }
   });
@@ -54,8 +75,8 @@ function renderTextWithMarks(node: JSONNode, key: string) {
   return element;
 }
 
-// Recursive node renderer
-function renderNode(node: JSONNode, index: number): React.ReactNode {
+// Recursive node renderer matching Note Reader & Editor
+export function renderNode(node: JSONNode, index: number): React.ReactNode {
   const key = `node-${index}`;
 
   switch (node.type) {
@@ -64,65 +85,92 @@ function renderNode(node: JSONNode, index: number): React.ReactNode {
 
     case "paragraph":
       return (
-        <p key={key}>
+        <p key={key} className="mb-4 text-base text-slate-700 leading-[1.75]">
           {node.content?.map((child, i) => renderNode(child, i)) || <br />}
         </p>
       );
 
     case "heading":
-      const level = node.attrs?.level || 2;
+      const level = (node.attrs?.level || 2) as number;
       const HeadingTag = `h${level}` as keyof React.JSX.IntrinsicElements;
-      // Generate ID for TOC
-      const id = node.content?.map((c) => c.text).join("").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+      const textContent = node.content?.map((c) => c.text).join("") || "";
+      const id = textContent.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+      const headingClasses: Record<number, string> = {
+        1: "group relative text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight mt-10 mb-4 pb-2 border-b border-slate-200 scroll-mt-24",
+        2: "group relative text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-8 mb-3 scroll-mt-24",
+        3: "group relative text-lg sm:text-xl font-semibold text-slate-900 tracking-tight mt-6 mb-2 scroll-mt-24",
+        4: "group relative text-base sm:text-lg font-semibold text-slate-900 mt-4 mb-2 scroll-mt-24",
+      };
+
+      const headingClass = headingClasses[level] || "group relative text-base font-semibold text-slate-900 mt-4 mb-2 scroll-mt-24";
+
       return (
-        <HeadingTag key={key} id={id}>
+        <HeadingTag key={key} id={id || undefined} className={headingClass}>
           {node.content?.map((child, i) => renderNode(child, i))}
+          {id && (
+            <a
+              href={`#${id}`}
+              aria-label={`Direct link to ${textContent}`}
+              className="inline-block opacity-0 group-hover:opacity-100 focus:opacity-100 ml-2 text-slate-400 hover:text-primary transition-opacity font-normal text-sm select-none"
+            >
+              #
+            </a>
+          )}
         </HeadingTag>
       );
 
     case "bulletList":
       return (
-        <ul key={key}>
+        <ul key={key} className="my-4 space-y-1.5 pl-6 list-disc text-slate-700 marker:text-slate-400 leading-[1.7]">
           {node.content?.map((child, i) => renderNode(child, i))}
         </ul>
       );
 
     case "orderedList":
       return (
-        <ol key={key}>
+        <ol key={key} className="my-4 space-y-1.5 pl-6 list-decimal text-slate-700 marker:text-slate-500 font-normal leading-[1.7]">
           {node.content?.map((child, i) => renderNode(child, i))}
         </ol>
       );
 
     case "listItem":
       return (
-        <li key={key}>
+        <li key={key} className="pl-1">
           {node.content?.map((child, i) => renderNode(child, i))}
         </li>
       );
 
     case "blockquote":
       return (
-        <blockquote key={key}>
+        <blockquote key={key} className="my-5 pl-4 border-l-[3px] border-slate-300 italic text-slate-600">
           {node.content?.map((child, i) => renderNode(child, i))}
         </blockquote>
       );
 
     case "horizontalRule":
-      return <hr key={key} />;
+      return <hr key={key} className="my-8 border-slate-200" />;
 
     case "image":
       return (
-        <figure key={key} className="my-8">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+        <figure key={key} className="my-6">
           <img
             src={node.attrs?.src}
-            alt={node.attrs?.alt || ""}
+            alt={node.attrs?.alt || "Clinical diagram"}
             title={node.attrs?.title}
-            className="rounded-xl border border-border-subtle shadow-sm w-full h-auto"
+            loading={index < 3 ? "eager" : "lazy"}
+            decoding="async"
+            width={node.attrs?.width}
+            height={node.attrs?.height}
+            style={{
+              maxWidth: "100%",
+              height: "auto",
+              aspectRatio: node.attrs?.width && node.attrs?.height ? `${node.attrs.width}/${node.attrs.height}` : "auto",
+            }}
+            className="rounded-lg border border-slate-200 shadow-xs mx-auto object-contain max-h-[500px]"
           />
           {node.attrs?.alt && (
-            <figcaption className="text-center mt-2 text-sm text-muted-foreground">
+            <figcaption className="text-center mt-2 text-xs text-slate-500 font-medium">
               {node.attrs.alt}
             </figcaption>
           )}
@@ -131,8 +179,8 @@ function renderNode(node: JSONNode, index: number): React.ReactNode {
 
     case "table":
       return (
-        <div key={key} className="my-8 overflow-x-auto">
-          <table className="w-full text-sm text-left">
+        <div key={key} className="my-6 overflow-x-auto rounded-lg border border-slate-200 shadow-xs">
+          <table className="w-full text-sm text-left border-collapse bg-white">
             {node.content?.map((child, i) => renderNode(child, i))}
           </table>
         </div>
@@ -140,26 +188,25 @@ function renderNode(node: JSONNode, index: number): React.ReactNode {
 
     case "tableRow":
       return (
-        <tr key={key} className="border-b border-border-subtle hover:bg-muted/50 transition-colors">
+        <tr key={key} className="border-b border-slate-100 hover:bg-slate-50/70 transition-colors last:border-0">
           {node.content?.map((child, i) => renderNode(child, i))}
         </tr>
       );
 
     case "tableHeader":
       return (
-        <th key={key} className="p-3 bg-muted font-semibold text-foreground border-b-2 border-border-subtle">
+        <th key={key} className="px-4 py-3 bg-slate-50 font-semibold text-slate-900 border-b border-slate-200 text-xs uppercase tracking-wider">
           {node.content?.map((child, i) => renderNode(child, i))}
         </th>
       );
 
     case "tableCell":
       return (
-        <td key={key} className="p-3">
+        <td key={key} className="px-4 py-3 text-slate-700 text-sm align-top leading-normal">
           {node.content?.map((child, i) => renderNode(child, i))}
         </td>
       );
 
-    // Custom Callout node support
     case "callout":
       const type = (node.attrs?.type as CalloutType) || "clinical_note";
       const title = node.attrs?.title;
@@ -170,10 +217,9 @@ function renderNode(node: JSONNode, index: number): React.ReactNode {
       );
 
     default:
-      // Gracefully handle unknown blocks by diving into content if it exists
       if (node.content) {
         return (
-          <div key={key} className="unknown-node-wrapper" data-node-type={node.type}>
+          <div key={key} className="my-2" data-node-type={node.type}>
             {node.content.map((child, i) => renderNode(child, i))}
           </div>
         );
@@ -182,19 +228,18 @@ function renderNode(node: JSONNode, index: number): React.ReactNode {
   }
 }
 
-export function ArticleRenderer({ content }: ArticleRendererProps) {
-  // Check if content is valid TipTap JSON
+export function ArticleRenderer({ content, className }: ArticleRendererProps) {
   if (!content || typeof content !== "object" || !content.content || !Array.isArray(content.content)) {
     return (
-      <div className="text-muted-foreground italic border-l-4 border-warning pl-4 py-2">
-        Content is currently unavailable or improperly formatted.
+      <div className="rounded-lg border border-slate-200 bg-slate-50 p-6 text-sm text-slate-500 italic">
+        Content is currently being prepared for this reference note.
       </div>
     );
   }
 
   return (
-    <article className="prose prose-slate dark:prose-invert max-w-none w-full">
+    <div className={`article-content max-w-[65ch] w-full mx-auto ${className || ""}`}>
       {content.content.map((node: JSONNode, index: number) => renderNode(node, index))}
-    </article>
+    </div>
   );
 }

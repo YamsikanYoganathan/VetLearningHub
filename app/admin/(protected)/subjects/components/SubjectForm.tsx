@@ -6,6 +6,7 @@ import { createSubject, updateSubject } from "../actions";
 import { Loader2, Save, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface SubjectFormProps {
   areas: { id: string; name: string }[];
@@ -16,6 +17,7 @@ interface SubjectFormProps {
     description: string | null;
     sort_order: number | null;
     area_id: string | null;
+    is_active?: boolean;
   };
 }
 
@@ -28,7 +30,8 @@ export default function SubjectForm({ areas, initialData }: SubjectFormProps) {
   const [slug, setSlug] = useState(initialData?.slug || "");
   const [description, setDescription] = useState(initialData?.description || "");
   const [sortOrder, setSortOrder] = useState(initialData?.sort_order?.toString() || "0");
-  const [areaId, setAreaId] = useState(initialData?.area_id || (areas.length > 0 ? areas[0].id : ""));
+  const [areaId, setAreaId] = useState(initialData?.area_id || "");
+  const [isActive, setIsActive] = useState(initialData?.is_active ?? true);
 
   const generateSlug = (val: string) => {
     return val
@@ -50,7 +53,7 @@ export default function SubjectForm({ areas, initialData }: SubjectFormProps) {
       setError("Please select an Academic Area.");
       return;
     }
-    
+
     setLoading(true);
     setError(null);
 
@@ -60,6 +63,7 @@ export default function SubjectForm({ areas, initialData }: SubjectFormProps) {
     formData.append("description", description);
     formData.append("sort_order", sortOrder);
     formData.append("area_id", areaId);
+    formData.append("is_active", isActive ? "true" : "false");
 
     let result;
     if (initialData) {
@@ -77,23 +81,34 @@ export default function SubjectForm({ areas, initialData }: SubjectFormProps) {
   };
 
   return (
-    <div className="max-w-2xl bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
-      <div className="mb-6">
-        <Link href="/admin/subjects" className="inline-flex items-center text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors">
-          <ArrowLeft className="w-4 h-4 mr-1" />
+    <div className="max-w-2xl bg-white rounded-xl border border-slate-200 shadow-xs p-6">
+      <div className="mb-6 flex items-center justify-between">
+        <Link
+          href="/admin/subjects"
+          className="inline-flex items-center text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors"
+        >
+          <ArrowLeft className="w-3.5 h-3.5 mr-1" />
           Back to Subjects
         </Link>
+        <Button onClick={handleSubmit} disabled={loading} size="sm">
+          {loading ? (
+            <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" />
+          ) : (
+            <Save className="w-3.5 h-3.5 mr-1" />
+          )}
+          <span>{initialData ? "Save Changes" : "Create Subject"}</span>
+        </Button>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
-          <div className="p-4 rounded-xl bg-red-50 text-red-700 text-sm border border-red-200">
+          <div className="p-3.5 rounded-lg bg-red-50 text-red-700 text-xs font-medium border border-red-200">
             {error}
           </div>
         )}
 
         <div>
-          <label htmlFor="area_id" className="block text-sm font-bold text-slate-700 mb-1.5">
+          <label htmlFor="area_id" className="block text-xs font-semibold text-slate-700 mb-1">
             Academic Area <span className="text-red-500">*</span>
           </label>
           <select
@@ -101,79 +116,83 @@ export default function SubjectForm({ areas, initialData }: SubjectFormProps) {
             required
             value={areaId}
             onChange={(e) => setAreaId(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white transition-all text-sm"
+            className="w-full px-3 py-2 rounded-md bg-white border border-slate-200 text-xs sm:text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary"
           >
-            <option value="" disabled>Select an area...</option>
-            {areas.map(a => (
-              <option key={a.id} value={a.id}>{a.name}</option>
+            <option value="" disabled>Select parent area...</option>
+            {areas.map((a) => (
+              <option key={a.id} value={a.id}>
+                {a.name}
+              </option>
             ))}
           </select>
         </div>
 
         <div>
-          <label htmlFor="name" className="block text-sm font-bold text-slate-700 mb-1.5">
-            Name <span className="text-red-500">*</span>
+          <label htmlFor="name" className="block text-xs font-semibold text-slate-700 mb-1">
+            Subject Name <span className="text-red-500">*</span>
           </label>
-          <input
+          <Input
             id="name"
             type="text"
             required
             value={name}
             onChange={handleNameChange}
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white transition-all text-sm"
-            placeholder="e.g. Canine Anatomy"
+            placeholder="e.g. Small Animal Surgery"
           />
         </div>
 
         <div>
-          <label htmlFor="slug" className="block text-sm font-bold text-slate-700 mb-1.5">
+          <label htmlFor="slug" className="block text-xs font-semibold text-slate-700 mb-1">
             URL Slug <span className="text-red-500">*</span>
           </label>
-          <input
+          <Input
             id="slug"
             type="text"
             required
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white transition-all text-sm font-mono"
-            placeholder="e.g. canine-anatomy"
+            className="font-mono text-xs"
           />
-          <p className="text-xs text-slate-500 mt-1.5">Must be unique and URL-friendly.</p>
         </div>
 
         <div>
-          <label htmlFor="description" className="block text-sm font-bold text-slate-700 mb-1.5">
+          <label htmlFor="description" className="block text-xs font-semibold text-slate-700 mb-1">
             Description
           </label>
           <textarea
             id="description"
+            rows={3}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            rows={3}
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white transition-all text-sm resize-none"
-            placeholder="Optional description of this subject."
+            className="w-full px-3 py-2 rounded-md border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary placeholder:text-slate-400"
+            placeholder="Subject overview..."
           />
         </div>
 
         <div>
-          <label htmlFor="sort_order" className="block text-sm font-bold text-slate-700 mb-1.5">
-            Sort Order
+          <label htmlFor="sort_order" className="block text-xs font-semibold text-slate-700 mb-1">
+            Sort Index
           </label>
-          <input
+          <Input
             id="sort_order"
             type="number"
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:bg-white transition-all text-sm"
+            className="text-xs"
           />
-          <p className="text-xs text-slate-500 mt-1.5">Lower numbers appear first within the Academic Area.</p>
         </div>
 
-        <div className="pt-4 flex items-center justify-end border-t border-slate-100">
-          <Button type="submit" disabled={loading} className="bg-teal-600 hover:bg-teal-700 text-white rounded-xl">
-            {loading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
-            {initialData ? "Save Changes" : "Create Subject"}
-          </Button>
+        <div className="flex items-center gap-2 pt-2">
+          <input
+            id="is_active"
+            type="checkbox"
+            checked={isActive}
+            onChange={(e) => setIsActive(e.target.checked)}
+            className="w-4 h-4 text-primary rounded border-slate-300 focus:ring-primary"
+          />
+          <label htmlFor="is_active" className="text-xs font-medium text-slate-700 cursor-pointer">
+            Active in curriculum (visible to public)
+          </label>
         </div>
       </form>
     </div>

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { AlertCircle, Lightbulb, Stethoscope, BookOpen, AlertTriangle, Info } from "lucide-react"
+import { AlertCircle, Lightbulb, Stethoscope, GraduationCap, AlertTriangle, BookMarked } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export type CalloutType = "key_point" | "important" | "clinical_note" | "exam_tip" | "definition" | "warning"
@@ -9,36 +9,61 @@ interface CalloutProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: string
 }
 
-const calloutConfig = {
+const calloutConfig: Record<CalloutType, {
+  icon: React.ElementType
+  borderColor: string
+  bg: string
+  textColor: string
+  titleColor: string
+  defaultTitle: string
+}> = {
   key_point: {
     icon: Lightbulb,
-    classes: "border-l-primary bg-primary/5 text-primary",
-    defaultTitle: "Key Point",
-  },
-  important: {
-    icon: AlertCircle,
-    classes: "border-l-error bg-error/5 text-error",
-    defaultTitle: "Important",
+    borderColor: "border-l-sky-600",
+    bg: "bg-sky-50/50",
+    textColor: "text-slate-700",
+    titleColor: "text-sky-900",
+    defaultTitle: "Key Concept",
   },
   clinical_note: {
     icon: Stethoscope,
-    classes: "border-l-info bg-info/5 text-info",
-    defaultTitle: "Clinical Note",
+    borderColor: "border-l-teal-600",
+    bg: "bg-teal-50/50",
+    textColor: "text-slate-700",
+    titleColor: "text-teal-900",
+    defaultTitle: "Clinical Consideration",
+  },
+  important: {
+    icon: AlertCircle,
+    borderColor: "border-l-rose-500",
+    bg: "bg-rose-50/40",
+    textColor: "text-slate-700",
+    titleColor: "text-rose-900",
+    defaultTitle: "Important Note",
   },
   exam_tip: {
-    icon: BookOpen,
-    classes: "border-l-success bg-success/5 text-success",
-    defaultTitle: "Exam Tip",
+    icon: GraduationCap,
+    borderColor: "border-l-indigo-500",
+    bg: "bg-indigo-50/40",
+    textColor: "text-slate-700",
+    titleColor: "text-indigo-900",
+    defaultTitle: "Board Review Point",
   },
   definition: {
-    icon: Info,
-    classes: "border-l-secondary-foreground bg-secondary text-secondary-foreground",
+    icon: BookMarked,
+    borderColor: "border-l-slate-400",
+    bg: "bg-slate-50",
+    textColor: "text-slate-700",
+    titleColor: "text-slate-900",
     defaultTitle: "Definition",
   },
   warning: {
     icon: AlertTriangle,
-    classes: "border-l-warning bg-warning/5 text-warning",
-    defaultTitle: "Warning",
+    borderColor: "border-l-amber-500",
+    bg: "bg-amber-50/40",
+    textColor: "text-slate-700",
+    titleColor: "text-amber-900",
+    defaultTitle: "Caution / Warning",
   },
 }
 
@@ -49,25 +74,27 @@ export function Callout({
   children,
   ...props
 }: CalloutProps) {
-  const config = calloutConfig[type]
+  const config = calloutConfig[type] || calloutConfig.key_point
   const Icon = config.icon
 
   return (
-    <div
+    <aside
       className={cn(
-        "my-6 flex flex-col gap-2 rounded-r-lg border-l-4 p-4",
-        config.classes,
+        "my-6 rounded-r-lg border border-l-[3.5px] border-slate-200/80 p-4 transition-all duration-150",
+        config.borderColor,
+        config.bg,
         className
       )}
+      role="note"
       {...props}
     >
-      <div className="flex items-center gap-2 font-semibold tracking-tight">
-        <Icon className="h-5 w-5" />
-        <span>{title || config.defaultTitle}</span>
+      <div className="flex items-center gap-2 mb-1.5 font-semibold text-sm tracking-tight">
+        <Icon className={cn("h-4 w-4 shrink-0", config.titleColor)} aria-hidden="true" />
+        <span className={config.titleColor}>{title || config.defaultTitle}</span>
       </div>
-      <div className="text-sm leading-relaxed opacity-90 prose-p:my-0">
+      <div className={cn("text-sm leading-relaxed", config.textColor, "prose-p:my-1 prose-p:leading-relaxed")}>
         {children}
       </div>
-    </div>
+    </aside>
   )
 }

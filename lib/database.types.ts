@@ -19,6 +19,7 @@ export type Database = {
           created_at: string
           description: string | null
           id: string
+          is_active: boolean
           name: string
           slug: string
           sort_order: number | null
@@ -28,6 +29,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          is_active?: boolean
           name: string
           slug: string
           sort_order?: number | null
@@ -37,6 +39,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          is_active?: boolean
           name?: string
           slug?: string
           sort_order?: number | null
@@ -79,6 +82,7 @@ export type Database = {
           author_id: string | null
           content: Json
           created_at: string
+          fts: unknown
           id: string
           published_at: string | null
           reading_time: number | null
@@ -94,6 +98,7 @@ export type Database = {
           author_id?: string | null
           content?: Json
           created_at?: string
+          fts?: unknown
           id?: string
           published_at?: string | null
           reading_time?: number | null
@@ -109,6 +114,7 @@ export type Database = {
           author_id?: string | null
           content?: Json
           created_at?: string
+          fts?: unknown
           id?: string
           published_at?: string | null
           reading_time?: number | null
@@ -138,6 +144,7 @@ export type Database = {
           description: string | null
           icon: string | null
           id: string
+          is_active: boolean
           name: string
           slug: string
           sort_order: number | null
@@ -150,6 +157,7 @@ export type Database = {
           description?: string | null
           icon?: string | null
           id?: string
+          is_active?: boolean
           name: string
           slug: string
           sort_order?: number | null
@@ -162,6 +170,7 @@ export type Database = {
           description?: string | null
           icon?: string | null
           id?: string
+          is_active?: boolean
           name?: string
           slug?: string
           sort_order?: number | null
@@ -203,6 +212,7 @@ export type Database = {
           created_at: string
           description: string | null
           id: string
+          is_active: boolean
           name: string
           slug: string
           sort_order: number | null
@@ -213,6 +223,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          is_active?: boolean
           name: string
           slug: string
           sort_order?: number | null
@@ -223,6 +234,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          is_active?: boolean
           name?: string
           slug?: string
           sort_order?: number | null
@@ -265,9 +277,40 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_my_role: {
+        Args: never
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
       has_role: {
         Args: { required_role: Database["public"]["Enums"]["app_role"] }
         Returns: boolean
+      }
+      search_published_notes: {
+        Args: {
+          filter_area?: string
+          filter_subject?: string
+          filter_topic?: string
+          page_number?: number
+          page_size?: number
+          search_query: string
+        }
+        Returns: {
+          area_name: string
+          area_slug: string
+          id: string
+          published_at: string
+          rank: number
+          reading_time: number
+          short_description: string
+          slug: string
+          subject_name: string
+          subject_slug: string
+          title: string
+          topic_name: string
+          topic_slug: string
+          total_count: number
+          updated_at: string
+        }[]
       }
     }
     Enums: {

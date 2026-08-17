@@ -2,6 +2,7 @@ import React from "react";
 import { requireEditor } from "@/lib/supabase/rbac";
 import AdminSidebar from "./AdminSidebar";
 import AdminHeader from "./AdminHeader";
+import { CmsOnboardingTour } from "@/components/onboarding/CmsOnboardingTour";
 
 export default async function AdminLayout({
   children,
@@ -21,6 +22,7 @@ export default async function AdminLayout({
           {children}
         </main>
       </div>
+      <CmsOnboardingTour />
     </div>
   );
 }

@@ -2,23 +2,25 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: "default" | "secondary" | "outline" | "success" | "warning" | "error"
+  variant?: "default" | "primary" | "secondary" | "outline" | "success" | "warning" | "error" | "neutral"
 }
 
 const badgeVariants = {
-  default: "border-transparent bg-primary text-primary-foreground",
-  secondary: "border-transparent bg-secondary text-secondary-foreground",
-  outline: "text-text-primary",
-  success: "border-transparent bg-success/10 text-success dark:bg-success/20 dark:text-success",
-  warning: "border-transparent bg-warning/10 text-warning dark:bg-warning/20 dark:text-warning",
-  error: "border-transparent bg-error/10 text-error dark:bg-error/20 dark:text-error",
+  default: "border-slate-200 bg-slate-100 text-slate-700",
+  neutral: "border-slate-200 bg-slate-50 text-slate-600",
+  primary: "border-sky-200/80 bg-sky-50 text-sky-700",
+  secondary: "border-teal-200/80 bg-teal-50 text-teal-700",
+  outline: "border-slate-200 bg-transparent text-slate-600",
+  success: "border-emerald-200/80 bg-emerald-50 text-emerald-700",
+  warning: "border-amber-200/80 bg-amber-50 text-amber-700",
+  error: "border-rose-200/80 bg-rose-50 text-rose-700",
 }
 
 function Badge({ className, variant = "default", ...props }: BadgeProps) {
   return (
     <div
       className={cn(
-        "inline-flex items-center rounded-full border border-border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+        "inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium tracking-tight select-none",
         badgeVariants[variant],
         className
       )}

@@ -20,7 +20,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      data-scroll-behavior="smooth"
+    >
       <body className={`${inter.variable} min-h-screen flex flex-col font-sans antialiased selection:bg-accent selection:text-accent-foreground`}>
         <ThemeProvider
           attribute="class"

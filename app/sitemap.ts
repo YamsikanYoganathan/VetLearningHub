@@ -1,8 +1,12 @@
 import { MetadataRoute } from 'next'
-import { createClient } from '@/lib/supabase/server'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
+import { Database } from '@/lib/database.types'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const supabase = await createClient()
+  const supabase = createSupabaseClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+  )
   
   // Base URL
   const baseUrl = 'https://www.vetulanservice.com'
@@ -16,7 +20,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
   
   // 2. Academic Areas
-  const { data: areas } = await supabase.from('academic_areas').select('slug, updated_at')
+  const { data: areas } = await supabase.from('academic_areas').select('slug, updated_at').eq('is_active', true)
   const areaRoutes = (areas || []).map(area => ({
     url: `${baseUrl}/subjects/${area.slug}`,
     lastModified: new Date(area.updated_at),
@@ -25,7 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
   
   // 3. Subjects
-  const { data: subjects } = await supabase.from('subjects').select('slug, updated_at, academic_areas!inner(slug)')
+  const { data: subjects } = await supabase.from('subjects').select('slug, updated_at, academic_areas!inner(slug)').eq('is_active', true).eq('academic_areas.is_active', true)
   const subjectRoutes = (subjects || []).map(subject => ({
     url: `${baseUrl}/subjects/${(subject.academic_areas as any).slug}/${subject.slug}`,
     lastModified: new Date(subject.updated_at),
@@ -34,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
   
   // 4. Topics
-  const { data: topics } = await supabase.from('topics').select('slug, updated_at, subjects!inner(slug, academic_areas!inner(slug))')
+  const { data: topics } = await supabase.from('topics').select('slug, updated_at, subjects!inner(slug, academic_areas!inner(slug))').eq('is_active', true).eq('subjects.is_active', true).eq('subjects.academic_areas.is_active', true)
   const topicRoutes = (topics || []).map(topic => {
     const s = topic.subjects as any
     const a = s.academic_areas as any

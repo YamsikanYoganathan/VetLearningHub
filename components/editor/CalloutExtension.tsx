@@ -1,136 +1,139 @@
-import { Node, mergeAttributes } from '@tiptap/core';
-import { ReactNodeViewRenderer, NodeViewWrapper, NodeViewContent } from '@tiptap/react';
-import React from 'react';
-import { AlertTriangle, BookOpen, CheckCircle, Info, Lightbulb, Stethoscope } from 'lucide-react';
+import { Node, mergeAttributes } from "@tiptap/core";
+import { ReactNodeViewRenderer, NodeViewWrapper, NodeViewContent } from "@tiptap/react";
+import React from "react";
+import { AlertCircle, Lightbulb, Stethoscope, GraduationCap, AlertTriangle, BookMarked } from "lucide-react";
 
 export interface CalloutOptions {
   HTMLAttributes: Record<string, any>;
 }
 
-declare module '@tiptap/core' {
+declare module "@tiptap/core" {
   interface Commands<ReturnType> {
     callout: {
-      /**
-       * Set a callout node
-       */
       setCallout: (options: { type: string; title: string }) => ReturnType;
     };
   }
 }
 
+const calloutConfig: Record<string, {
+  icon: React.ElementType;
+  borderColor: string;
+  bg: string;
+  textColor: string;
+  titleColor: string;
+  defaultTitle: string;
+}> = {
+  key_point: {
+    icon: Lightbulb,
+    borderColor: "border-l-sky-600",
+    bg: "bg-sky-50/50",
+    textColor: "text-slate-700",
+    titleColor: "text-sky-900",
+    defaultTitle: "Key Concept",
+  },
+  clinical_note: {
+    icon: Stethoscope,
+    borderColor: "border-l-teal-600",
+    bg: "bg-teal-50/50",
+    textColor: "text-slate-700",
+    titleColor: "text-teal-900",
+    defaultTitle: "Clinical Consideration",
+  },
+  important: {
+    icon: AlertCircle,
+    borderColor: "border-l-rose-500",
+    bg: "bg-rose-50/40",
+    textColor: "text-slate-700",
+    titleColor: "text-rose-900",
+    defaultTitle: "Important Note",
+  },
+  exam_tip: {
+    icon: GraduationCap,
+    borderColor: "border-l-indigo-500",
+    bg: "bg-indigo-50/40",
+    textColor: "text-slate-700",
+    titleColor: "text-indigo-900",
+    defaultTitle: "Board Review Point",
+  },
+  definition: {
+    icon: BookMarked,
+    borderColor: "border-l-slate-400",
+    bg: "bg-slate-50",
+    textColor: "text-slate-700",
+    titleColor: "text-slate-900",
+    defaultTitle: "Definition",
+  },
+  warning: {
+    icon: AlertTriangle,
+    borderColor: "border-l-amber-500",
+    bg: "bg-amber-50/40",
+    textColor: "text-slate-700",
+    titleColor: "text-amber-900",
+    defaultTitle: "Caution / Warning",
+  },
+};
+
 const CalloutComponent = (props: any) => {
-  const { type, title } = props.node.attrs;
-
-  const getIcon = () => {
-    switch (type) {
-      case 'warning': return <AlertTriangle className="w-5 h-5" />;
-      case 'clinical_note': return <Stethoscope className="w-5 h-5" />;
-      case 'exam_tip': return <Lightbulb className="w-5 h-5" />;
-      case 'important': return <CheckCircle className="w-5 h-5" />;
-      case 'definition': return <BookOpen className="w-5 h-5" />;
-      case 'key_point':
-      default:
-        return <Info className="w-5 h-5" />;
-    }
-  };
-
-  const getColorClasses = () => {
-    switch (type) {
-      case 'warning': return 'bg-red-50 border-red-200 text-red-900';
-      case 'clinical_note': return 'bg-teal-50 border-teal-200 text-teal-900';
-      case 'exam_tip': return 'bg-amber-50 border-amber-200 text-amber-900';
-      case 'important': return 'bg-emerald-50 border-emerald-200 text-emerald-900';
-      case 'definition': return 'bg-indigo-50 border-indigo-200 text-indigo-900';
-      case 'key_point':
-      default:
-        return 'bg-sky-50 border-sky-200 text-sky-900';
-    }
-  };
-
-  const getIconColor = () => {
-    switch (type) {
-      case 'warning': return 'text-red-500';
-      case 'clinical_note': return 'text-teal-500';
-      case 'exam_tip': return 'text-amber-500';
-      case 'important': return 'text-emerald-500';
-      case 'definition': return 'text-indigo-500';
-      case 'key_point':
-      default:
-        return 'text-sky-500';
-    }
-  };
+  const { type = "key_point", title } = props.node.attrs;
+  const config = calloutConfig[type] || calloutConfig.key_point;
+  const Icon = config.icon;
 
   return (
-    <NodeViewWrapper className={`my-6 rounded-xl border ${getColorClasses()} overflow-hidden`}>
-      <div className={`px-4 py-3 border-b flex items-center gap-2 font-bold text-sm ${getColorClasses()} bg-opacity-50`}>
-        <div className={getIconColor()}>
-          {getIcon()}
-        </div>
-        <span>{title}</span>
+    <NodeViewWrapper
+      className={`my-6 rounded-r-lg border border-l-[3.5px] border-slate-200/80 p-4 ${config.borderColor} ${config.bg}`}
+    >
+      <div className="flex items-center gap-2 mb-1.5 font-semibold text-sm tracking-tight select-none">
+        <Icon className={`h-4 w-4 shrink-0 ${config.titleColor}`} />
+        <span className={config.titleColor}>{title || config.defaultTitle}</span>
       </div>
-      <NodeViewContent className="px-4 py-3 text-sm prose-p:my-1 prose-p:last:mb-0" />
+      <NodeViewContent className={`text-sm leading-relaxed ${config.textColor} prose-p:my-1`} />
     </NodeViewWrapper>
   );
 };
 
 export const CalloutExtension = Node.create<CalloutOptions>({
-  name: 'callout',
-  group: 'block',
-  content: 'block+',
+  name: "callout",
+  group: "block",
+  content: "block+",
   defining: true,
 
   addAttributes() {
     return {
       type: {
-        default: 'key_point',
-        parseHTML: element => element.getAttribute('data-type'),
-        renderHTML: attributes => {
-          return {
-            'data-type': attributes.type,
-          }
-        },
+        default: "key_point",
+        parseHTML: (element) => element.getAttribute("data-type"),
+        renderHTML: (attributes) => ({ "data-type": attributes.type }),
       },
       title: {
-        default: 'Key Point',
-        parseHTML: element => element.getAttribute('data-title'),
-        renderHTML: attributes => {
-          return {
-            'data-title': attributes.title,
-          }
-        },
+        default: "Key Concept",
+        parseHTML: (element) => element.getAttribute("data-title"),
+        renderHTML: (attributes) => ({ "data-title": attributes.title }),
       },
-    }
+    };
   },
 
   parseHTML() {
-    return [
-      {
-        tag: 'div[data-type]',
-      },
-    ]
+    return [{ tag: "div[data-type]" }];
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['div', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0]
+    return ["div", mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0];
   },
 
   addCommands() {
     return {
-      setCallout: (options) => ({ commands }) => {
-        return commands.insertContent({
-          type: this.name,
-          attrs: options,
-          content: [
-            {
-              type: 'paragraph',
-            },
-          ],
-        })
-      },
-    }
+      setCallout:
+        (options) =>
+        ({ commands }) =>
+          commands.insertContent({
+            type: this.name,
+            attrs: options,
+            content: [{ type: "paragraph" }],
+          }),
+    };
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(CalloutComponent)
+    return ReactNodeViewRenderer(CalloutComponent);
   },
-})
+});
