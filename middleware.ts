@@ -1,8 +1,8 @@
 import { type NextRequest } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 
-export default async function proxy(request: NextRequest) {
-  console.log('PROXY MIDDLEWARE EXECUTED');
+export default async function middleware(request: NextRequest) {
+  console.log('MIDDLEWARE EXECUTED');
   return await updateSession(request)
 }
 
