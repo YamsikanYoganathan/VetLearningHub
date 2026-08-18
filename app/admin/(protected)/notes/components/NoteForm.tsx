@@ -1,64 +1,120 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { createNote, updateNote } from "../actions";
-import { Loader2, Save, ArrowLeft, ExternalLink, HelpCircle } from "lucide-react";
 import Link from "next/link";
+import {
+  ArrowLeft,
+  Save,
+  Loader2,
+  ExternalLink,
+  Paperclip,
+  Upload,
+  Trash2,
+  Download,
+  AlertCircle,
+  FileText
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Editor from "@/components/editor/Editor";
+import { createNote, updateNote } from "../actions";
+import { uploadDocumentAction, DocumentAttachment } from "@/app/admin/(protected)/actions/upload";
+
+interface Topic {
+  id: string;
+  name: string;
+  subjects?: {
+    name: string;
+    academic_areas?: {
+      name: string;
+    };
+  };
+}
 
 interface NoteFormProps {
-  topics: { id: string; name: string; subjects: any }[];
   initialData?: {
     id: string;
     title: string;
     slug: string;
-    status: string;
-    short_description?: string | null;
-    reading_time?: number | null;
+    short_description: string | null;
     content: any;
+    status: string;
+    topic_id: string;
+    reading_time: number | null;
     sort_order: number | null;
-    topic_id: string | null;
   };
+  topics: Topic[];
 }
 
-export default function NoteForm({ topics, initialData }: NoteFormProps) {
+export default function NoteForm({ initialData, topics }: NoteFormProps) {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [title, setTitle] = useState(initialData?.title || "");
   const [slug, setSlug] = useState(initialData?.slug || "");
   const [shortDescription, setShortDescription] = useState(initialData?.short_description || "");
-  const [readingTime, setReadingTime] = useState(initialData?.reading_time?.toString() || "5");
+  const [content, setContent] = useState<any>(initialData?.content || null);
   const [status, setStatus] = useState(initialData?.status || "draft");
-  const [sortOrder, setSortOrder] = useState(initialData?.sort_order?.toString() || "0");
-  const [topicId, setTopicId] = useState(initialData?.topic_id || "");
-  const [content, setContent] = useState<any>(initialData?.content || { type: "doc", content: [] });
+  const [topicId, setTopicId] = useState(initialData?.topic_id || (topics[0]?.id || ""));
+  const [readingTime, setReadingTime] = useState<number | string>(initialData?.reading_time || 5);
+  const [sortOrder, setSortOrder] = useState<number | string>(initialData?.sort_order || 0);
 
-  const generateSlug = (val: string) => {
-    return val
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)+/g, "");
-  };
+  // Document Attachments State
+  const initialAttachments: DocumentAttachment[] = Array.isArray(initialData?.content?.attachments)
+    ? initialData.content.attachments
+    : [];
+  const [attachments, setAttachments] = useState<DocumentAttachment[]>(initialAttachments);
+  const [uploadingDoc, setUploadingDoc] = useState(false);
+  const [docError, setDocError] = useState<string | null>(null);
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
+    const newTitle = e.target.value;
+    setTitle(newTitle);
     if (!initialData) {
-      setSlug(generateSlug(e.target.value));
+      const generatedSlug = newTitle
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+      setSlug(generatedSlug);
     }
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingDoc(true);
+    setDocError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const result = await uploadDocumentAction(formData);
+
+      if (result.error) {
+        setDocError(result.error);
+      } else if (result.attachment) {
+        setAttachments((prev) => [...prev, result.attachment!]);
+      }
+    } catch (err: any) {
+      setDocError(err.message || "Failed to upload document.");
+    } finally {
+      setUploadingDoc(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const handleRemoveAttachment = (id: string) => {
+    setAttachments((prev) => prev.filter((a) => a.id !== id));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!topicId) {
-      setError("Please select a parent Topic for this note.");
-      return;
-    }
-
     setLoading(true);
     setError(null);
 
@@ -66,11 +122,17 @@ export default function NoteForm({ topics, initialData }: NoteFormProps) {
     formData.append("title", title);
     formData.append("slug", slug);
     formData.append("short_description", shortDescription);
-    formData.append("reading_time", readingTime);
-    formData.append("status", status);
-    formData.append("sort_order", sortOrder);
     formData.append("topic_id", topicId);
-    formData.append("content", JSON.stringify(content));
+    formData.append("status", status);
+    formData.append("reading_time", String(readingTime));
+    formData.append("sort_order", String(sortOrder));
+
+    // Combine TipTap content with attachments in JSONB structure
+    const fullContent = {
+      ...(content || { type: "doc", content: [] }),
+      attachments,
+    };
+    formData.append("content", JSON.stringify(fullContent));
 
     let result;
     if (initialData) {
@@ -102,7 +164,7 @@ export default function NoteForm({ topics, initialData }: NoteFormProps) {
         <div className="flex items-center gap-3">
           {initialData && (
             <Link
-              href={`/admin/notes/${initialData.id}/preview`}
+              href={"/admin/notes/" + initialData.id + "/preview"}
               target="_blank"
               className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline"
             >
@@ -169,6 +231,128 @@ export default function NoteForm({ topics, initialData }: NoteFormProps) {
                 Article Body (WYSIWYG)
               </label>
               <Editor initialContent={initialData?.content} onChange={setContent} />
+            </div>
+
+            {/* Media & Supporting Attachments Section */}
+            <div id="cms-tour-attachments" className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Paperclip className="w-4 h-4 text-teal-600" />
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">
+                      Supporting Study Resources & Attachments
+                    </h3>
+                  </div>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Attach reference PDFs, clinical guidelines, or lecture handouts (up to 20MB).
+                  </p>
+                </div>
+
+                <div>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".pdf,.doc,.docx,.ppt,.pptx,application/pdf"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                    id="document-upload-input"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={uploadingDoc}
+                    onClick={() => fileInputRef.current?.click()}
+                    className="text-xs"
+                  >
+                    {uploadingDoc ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" />
+                        <span>Uploading...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-3.5 h-3.5 mr-1.5 text-teal-600" />
+                        <span>Attach PDF / Document</span>
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
+
+              {docError && (
+                <div className="p-3 rounded-lg bg-red-50 text-red-700 text-xs font-medium border border-red-200 flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
+                  <span>{docError}</span>
+                </div>
+              )}
+
+              {/* List of Attached Documents */}
+              {attachments.length === 0 ? (
+                <div className="p-6 rounded-lg border border-dashed border-slate-200 bg-slate-50/50 text-center text-xs text-slate-400">
+                  No supporting documents attached yet. Click &quot;Attach PDF / Document&quot; above to add study materials.
+                </div>
+              ) : (
+                <div className="space-y-2.5">
+                  {attachments.map((file) => {
+                    const ext = file.name.split(".").pop()?.toUpperCase() || "PDF";
+                    const isPdf = ext === "PDF";
+                    return (
+                      <div
+                        key={file.id}
+                        className="flex items-center justify-between p-3 rounded-lg border border-slate-200 bg-slate-50/60 hover:bg-slate-50 transition-colors"
+                      >
+                        <div className="flex items-center gap-3 min-w-0 pr-3">
+                          <span
+                            className={"w-8 h-8 rounded-md font-bold text-[10px] flex items-center justify-center shrink-0 " + (
+                              isPdf
+                                ? "bg-rose-100 border border-rose-200 text-rose-700"
+                                : "bg-sky-100 border border-sky-200 text-sky-700"
+                            )}
+                          >
+                            {ext}
+                          </span>
+                          <div className="min-w-0">
+                            <p className="text-xs font-semibold text-slate-800 truncate" title={file.name}>
+                              {file.name}
+                            </p>
+                            <p className="text-[11px] text-slate-400">
+                              {file.size
+                                ? file.size / (1024 * 1024) > 1
+                                  ? (file.size / (1024 * 1024)).toFixed(1) + " MB"
+                                  : Math.round(file.size / 1024) + " KB"
+                                : "Document Resource"}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 shrink-0">
+                          <a
+                            href={file.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            download={file.name}
+                            className="p-1.5 rounded-md text-slate-500 hover:text-primary hover:bg-white transition-colors"
+                            title="Preview / Download file"
+                            aria-label={"Download " + file.name}
+                          >
+                            <Download className="w-3.5 h-3.5" />
+                          </a>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveAttachment(file.id)}
+                            className="p-1.5 rounded-md text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                            title="Remove attachment"
+                            aria-label={"Remove " + file.name}
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
 

@@ -6,88 +6,64 @@ import {
   BookOpen,
   Layers,
   FileText,
-  CheckCircle2,
-  Sparkles,
 } from "lucide-react";
 import { SubjectCard } from "@/components/ui/SubjectCard";
 import { NoteRow } from "@/components/ui/NoteRow";
 import { HeroDocumentStack } from "@/components/ui/HeroDocumentStack";
 import { AtmosphericBackground } from "@/components/ui/AtmosphericBackground";
 import { CurriculumHierarchy } from "@/components/ui/CurriculumHierarchy";
+import { QuickStudyEntry } from "@/components/ui/QuickStudyEntry";
+import { HowVetulanWorks } from "@/components/ui/HowVetulanWorks";
+import { WhatYouCanFind } from "@/components/ui/WhatYouCanFind";
 import {
   getAcademicAreas,
   getRecentNotes,
   getPlatformCounts,
 } from "@/lib/supabase/queries";
-import { Button } from "@/components/ui/button";
 
-export const metadata = {
-  title: "Vetulan Service | Veterinary Academic Knowledge Platform",
-  description:
-    "A structured clinical knowledge platform and academic study reference for veterinary medicine, surgery, and pharmacology.",
-};
+export const revalidate = 60; // 1-minute ISR cache
 
 export default async function HomePage() {
   const [areas, recentNotes, counts] = await Promise.all([
     getAcademicAreas(),
-    getRecentNotes(4),
+    getRecentNotes(6),
     getPlatformCounts(),
   ]);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "Vetulan Service",
-    url: "https://www.vetulanservice.com",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: "https://www.vetulanservice.com/search?q={search_term_string}",
-      "query-input": "required name=search_term_string",
-    },
-  };
-
   return (
-    <div className="flex flex-col min-h-screen">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-
-      {/* Hero Section — Editorial Composition with 3D Depth Stack & Atmospheric Glow */}
-      <section className="relative border-b border-slate-200/80 bg-white overflow-hidden py-16 sm:py-20 lg:py-24">
-        {/* Atmospheric Blurred Glow & Subtle Geometric Motifs */}
+    <div className="relative overflow-hidden">
+      {/* 1. Hero Section */}
+      <section className="relative pt-12 pb-16 md:pt-16 md:pb-24 border-b border-slate-200/80 overflow-hidden">
         <AtmosphericBackground variant="hero" />
 
-        {/* Subtle grid background overlay */}
-        <div className="absolute inset-0 bg-grid-subtle opacity-40 pointer-events-none" />
-
-        <div className="container-page relative">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
-            {/* Left Column: Editorial Headline & Search */}
-            <div className="lg:col-span-7 space-y-7">
-              {/* Eyebrow Pill */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200/90 text-slate-700 text-xs font-semibold tracking-tight shadow-2xs">
-                <BookOpen className="w-3.5 h-3.5 text-primary" />
-                <span>Veterinary Academic Knowledge Platform</span>
+        <div className="container-page relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+            {/* Left Column: Core Value Proposition */}
+            <div className="lg:col-span-7 space-y-6 text-left">
+              {/* Clinical Platform Badge */}
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-50 border border-sky-100 text-primary text-xs font-semibold tracking-wide">
+                <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                <span>Veterinary Academic Curriculum & Reference Platform</span>
               </div>
 
-              {/* Large Headline */}
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight leading-[1.15] text-balance">
-                A clearer way to study veterinary medicine.
+              {/* Editorial Headline */}
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 leading-[1.15] text-balance">
+                The authoritative knowledge platform for veterinary medicine.
               </h1>
 
-              {/* Supporting Statement */}
-              <p className="text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed text-balance">
-                An authoritative, clinical reference library and curriculum syllabus organized across disciplines, core subjects, and structured diagnostic notes.
+              {/* Sub-Headline / Supporting Statement */}
+              <p className="text-base sm:text-lg text-slate-600 font-normal leading-relaxed max-w-2xl text-balance">
+                Structured clinical notes, curated diagnostic algorithms, and complete veterinary academic disciplines — organized sequentially for focused study.
               </p>
 
-              {/* Prominent Search Action Bar (Onboarding Step Target) */}
-              <div id="tour-search-target" className="max-w-xl">
+              {/* Integrated Hero Search Trigger */}
+              <div id="tour-search-target" className="pt-2 max-w-xl">
                 <Link
                   href="/search"
-                  className="flex items-center justify-between w-full h-12 px-4 rounded-lg border border-slate-200 bg-slate-50 hover:bg-white hover:border-slate-300 hover:shadow-xs transition-all duration-150 group text-left"
+                  className="flex items-center justify-between w-full px-4 py-3.5 rounded-xl border border-slate-200 bg-white shadow-xs hover:border-slate-300 hover:shadow-sm transition-all duration-150 group"
+                  aria-label="Search notes index"
                 >
-                  <div className="flex items-center gap-3 text-slate-500">
+                  <div className="flex items-center gap-3">
                     <Search className="w-4 h-4 text-slate-400 group-hover:text-primary transition-colors" />
                     <span className="text-xs sm:text-sm font-normal text-slate-500 group-hover:text-slate-800">
                       Search by topic, disease, drug, or clinical sign...
@@ -134,7 +110,10 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Academic Areas Section (Onboarding Step Target) */}
+      {/* 2. Quick Study Entry Bar */}
+      <QuickStudyEntry />
+
+      {/* 3. Academic Areas Section */}
       <section id="tour-academic-areas-target" className="relative py-16 sm:py-20 bg-slate-50/50 border-b border-slate-200/80">
         <AtmosphericBackground variant="subtle" />
         <div className="container-page relative">
@@ -180,8 +159,14 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Recently Published Notes (Onboarding Step Target) */}
-      <section id="tour-recent-notes-target" className="py-16 sm:py-20 bg-white border-b border-slate-200/80">
+      {/* 4. How Vetulan Works: 4-Step Learning Path */}
+      <HowVetulanWorks />
+
+      {/* 5. What You Can Find Here: Platform Resource Capabilities */}
+      <WhatYouCanFind />
+
+      {/* 6. Recently Published Notes */}
+      <section id="recent-notes" className="py-16 sm:py-20 bg-white border-b border-slate-200/80 scroll-mt-16">
         <div className="container-page">
           <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-10 pb-4 border-b border-slate-200/80">
             <div>
@@ -245,7 +230,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* How Vetulan Works / Platform Organization */}
+      {/* 7. Intelligent Learning Architecture (Curriculum Hierarchy) */}
       <section id="tour-structure-target" className="py-16 sm:py-20 bg-slate-50/70 border-b border-slate-200/60">
         <div className="container-page max-w-5xl mx-auto">
           <div className="text-center max-w-2xl mx-auto mb-10">

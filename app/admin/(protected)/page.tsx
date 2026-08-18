@@ -1,12 +1,30 @@
 import React from "react";
 import Link from "next/link";
-import { BookOpen, FileText, CheckCircle2, Clock, Layers, ArrowRight, Tags, Plus, PenLine } from "lucide-react";
+import { BookOpen, FileText, CheckCircle2, Clock, Layers, ArrowRight, Tags, Plus, PenLine, Paperclip } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
+function getDynamicGreeting(): string {
+  const formatter = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Colombo",
+    hour: "numeric",
+    hour12: false,
+  });
+  const hour = parseInt(formatter.format(new Date()), 10);
+
+  if (hour >= 5 && hour < 12) {
+    return "Good morning, welcome back.";
+  } else if (hour >= 12 && hour < 17) {
+    return "Good afternoon, welcome back.";
+  } else {
+    return "Good evening, welcome back.";
+  }
+}
+
 export default async function AdminOverviewPage() {
   const supabase = await createClient();
+  const greeting = getDynamicGreeting();
 
   // Fetch real counts from Supabase
   const [
@@ -44,7 +62,7 @@ export default async function AdminOverviewPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-            Good morning.
+            {greeting}
           </h1>
           <p className="text-sm text-slate-600 mt-1">
             Manage your veterinary knowledge base, curriculum structure, and clinical notes.
@@ -252,6 +270,18 @@ export default async function AdminOverviewPage() {
                 <span className="flex items-center gap-2">
                   <Tags className="w-3.5 h-3.5 text-slate-600" />
                   <span>Topics</span>
+                </span>
+                <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+              </Link>
+
+              <Link
+                id="cms-tour-attachments"
+                href="/admin/notes"
+                className="flex items-center justify-between p-2 rounded-lg text-xs font-medium text-slate-700 hover:bg-slate-50 border border-slate-100 hover:border-slate-200 transition-colors"
+              >
+                <span className="flex items-center gap-2">
+                  <Paperclip className="w-3.5 h-3.5 text-indigo-600" />
+                  <span>Media & Attachments</span>
                 </span>
                 <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
               </Link>

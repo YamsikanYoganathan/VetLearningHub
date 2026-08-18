@@ -74,12 +74,12 @@ export default function AdminSidebar({ role, email }: AdminSidebarProps) {
           <Image
             src="/logo-desktop.svg"
             alt="Vetulan Service"
-            width={120}
-            height={40}
-            className="h-8 w-auto"
+            width={44}
+            height={44}
+            className="h-10 w-auto object-contain"
             priority
           />
-          <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded border border-slate-200">
+          <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded border border-slate-200 ml-1">
             CMS
           </span>
         </Link>
@@ -106,14 +106,14 @@ export default function AdminSidebar({ role, email }: AdminSidebarProps) {
       >
         <div className="overflow-y-auto">
           {/* Desktop Brand Header */}
-          <div className="hidden md:flex h-16 px-6 items-center justify-between border-b border-slate-200 bg-white">
-            <Link href="/admin" className="flex items-center gap-2.5">
+          <div className="hidden md:flex h-16 px-5 items-center justify-between border-b border-slate-200 bg-white">
+            <Link href="/admin" className="flex items-center gap-2">
               <Image
                 src="/logo-desktop.svg"
                 alt="Vetulan Service"
-                width={140}
-                height={35}
-                className="h-7 w-auto"
+                width={168}
+                height={40}
+                className="h-12 w-auto object-contain"
                 priority
               />
             </Link>

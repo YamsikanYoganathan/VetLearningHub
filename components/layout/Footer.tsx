@@ -8,7 +8,7 @@ export function Footer() {
       <div className="container-page">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-14">
           {/* Brand & Mission Column */}
-          <div className="md:col-span-6 lg:col-span-5 space-y-4">
+          <div className="md:col-span-6 lg:col-span-5 space-y-2">
             <Link href="/" className="inline-block">
               <Image
                 src="/logo-desktop.svg"

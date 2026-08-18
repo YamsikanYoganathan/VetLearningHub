@@ -115,7 +115,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
   );
 
   return (
-    <div className="flex flex-wrap items-center gap-1 p-2 border-b border-slate-200 bg-slate-50/90 sticky top-16 z-10 select-none">
+    <div className="flex flex-wrap items-center gap-1 p-2 border-b border-slate-200 bg-slate-50/90 z-10 select-none">
       {/* Headings */}
       <div className="flex items-center gap-0.5 pr-1.5 border-r border-slate-200">
         <ToolbarButton

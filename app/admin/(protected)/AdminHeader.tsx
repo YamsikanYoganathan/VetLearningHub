@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Plus } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function AdminHeader() {
@@ -32,6 +32,20 @@ export default function AdminHeader() {
       </div>
 
       <div className="flex items-center gap-3">
+        <Link
+          id="cms-tour-search"
+          href="/search"
+          target="_blank"
+          className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-600 hover:text-slate-900 hover:bg-slate-100 text-xs font-medium transition-colors"
+          title="Search all curriculum notes"
+        >
+          <Search className="w-3.5 h-3.5 text-slate-400" />
+          <span>Search Index</span>
+          <kbd className="text-[10px] font-semibold text-slate-400 bg-white px-1.5 py-0.5 rounded border border-slate-200 ml-1">
+            ⌘K
+          </kbd>
+        </Link>
+
         {!pathname.startsWith("/admin/notes/new") && (
           <Button asChild size="sm">
             <Link href="/admin/notes/new">

@@ -5,6 +5,7 @@ import { Clock, Hash, FileText, AlertTriangle, ArrowLeft } from "lucide-react";
 import { requireEditor } from "@/lib/supabase/rbac";
 import { createClient } from "@/lib/supabase/server";
 import { ArticleRenderer } from "@/components/ui/ArticleRenderer";
+import { NoteAttachments } from "@/components/ui/NoteAttachments";
 import { TableOfContents } from "@/components/ui/TableOfContents";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Badge } from "@/components/ui/badge";
@@ -174,6 +175,8 @@ export default async function NotePreviewPage({
             </header>
 
             <ArticleRenderer content={note.content} />
+
+            <NoteAttachments attachments={(note.content as any)?.attachments} />
           </main>
 
           {/* Right Sticky TOC */}
