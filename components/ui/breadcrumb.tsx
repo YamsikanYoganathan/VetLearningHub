@@ -19,13 +19,13 @@ export function Breadcrumb({ items, className }: BreadcrumbProps) {
     <nav
       aria-label="Breadcrumb"
       className={cn(
-        "flex items-center gap-1.5 text-xs sm:text-sm text-slate-500 overflow-x-auto whitespace-nowrap py-1",
+        "flex items-center gap-1.5 text-xs sm:text-sm text-text-muted overflow-x-auto whitespace-nowrap py-1 select-none",
         className
       )}
     >
       <Link
         href="/"
-        className="inline-flex items-center gap-1 text-slate-500 hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 py-0.5"
+        className="inline-flex items-center gap-1 text-text-muted hover:text-primary transition-colors focus-ring rounded px-1 py-0.5"
         title="Home"
       >
         <Home className="w-3.5 h-3.5" />
@@ -37,10 +37,10 @@ export function Breadcrumb({ items, className }: BreadcrumbProps) {
 
         return (
           <React.Fragment key={`${item.label}-${index}`}>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-300 shrink-0" aria-hidden="true" />
+            <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/40 shrink-0" aria-hidden="true" />
             {isLast || !item.href ? (
               <span
-                className="font-medium text-slate-900 truncate max-w-[200px] sm:max-w-none px-1 py-0.5"
+                className="font-medium text-foreground truncate max-w-[200px] sm:max-w-none px-1 py-0.5"
                 aria-current={isLast ? "page" : undefined}
               >
                 {item.label}
@@ -48,7 +48,7 @@ export function Breadcrumb({ items, className }: BreadcrumbProps) {
             ) : (
               <Link
                 href={item.href}
-                className="text-slate-600 hover:text-primary transition-colors truncate max-w-[150px] sm:max-w-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded px-1 py-0.5"
+                className="text-text-secondary hover:text-primary transition-colors truncate max-w-[150px] sm:max-w-none focus-ring rounded px-1 py-0.5"
               >
                 {item.label}
               </Link>

@@ -104,10 +104,10 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       disabled={disabled}
       title={title}
       aria-label={title}
-      className={`p-1.5 rounded-md transition-colors flex items-center justify-center text-xs ${
+      className={`p-1.5 rounded-lg transition-all flex items-center justify-center text-xs cursor-pointer ${
         isActive
-          ? "bg-sky-100 text-sky-800 font-semibold"
-          : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+          ? "bg-primary-subtle text-primary font-semibold border border-primary/30"
+          : "text-text-secondary hover:bg-surface hover:text-foreground"
       } disabled:opacity-40 disabled:cursor-not-allowed`}
     >
       {children}
@@ -115,9 +115,9 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
   );
 
   return (
-    <div className="flex flex-wrap items-center gap-1 p-2 border-b border-slate-200 bg-slate-50/90 z-10 select-none">
+    <div className="sticky top-0 z-20 flex flex-wrap items-center gap-1 p-2 border-b border-border bg-surface-subtle/95 backdrop-blur-md select-none">
       {/* Headings */}
-      <div className="flex items-center gap-0.5 pr-1.5 border-r border-slate-200">
+      <div className="flex items-center gap-0.5 pr-1.5 border-r border-border">
         <ToolbarButton
           title="Heading 1"
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
@@ -142,7 +142,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       </div>
 
       {/* Inline Marks */}
-      <div className="flex items-center gap-0.5 px-1.5 border-r border-slate-200">
+      <div className="flex items-center gap-0.5 px-1.5 border-r border-border">
         <ToolbarButton
           title="Bold"
           onClick={() => editor.chain().focus().toggleBold().run()}
@@ -174,7 +174,7 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       </div>
 
       {/* Lists & Blocks */}
-      <div className="flex items-center gap-0.5 px-1.5 border-r border-slate-200">
+      <div className="flex items-center gap-0.5 px-1.5 border-r border-border">
         <ToolbarButton
           title="Bullet List"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -205,27 +205,27 @@ export default function EditorToolbar({ editor }: EditorToolbarProps) {
       </div>
 
       {/* Callouts Dropdown */}
-      <div className="flex items-center gap-0.5 px-1.5 border-r border-slate-200 relative group">
+      <div className="flex items-center gap-0.5 px-1.5 border-r border-border relative group">
         <button
           type="button"
           title="Insert Clinical Callout"
-          className="p-1.5 rounded-md text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors flex items-center gap-1 text-xs"
+          className="p-1.5 rounded-lg text-text-secondary hover:bg-surface hover:text-foreground transition-colors flex items-center gap-1 text-xs cursor-pointer"
         >
-          <MessageSquare className="w-3.5 h-3.5 text-teal-600" />
+          <MessageSquare className="w-3.5 h-3.5 text-secondary" />
           <span className="hidden sm:inline font-medium">Callout</span>
         </button>
-        <div className="absolute top-full left-0 mt-1 w-44 bg-white border border-slate-200 shadow-md rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all flex flex-col py-1 z-50">
-          <button type="button" onClick={() => toggleCallout("key_point", "Key Concept")} className="px-3 py-1.5 text-xs text-left hover:bg-slate-50 text-slate-700">Key Concept</button>
-          <button type="button" onClick={() => toggleCallout("clinical_note", "Clinical Consideration")} className="px-3 py-1.5 text-xs text-left hover:bg-slate-50 text-teal-700 font-medium">Clinical Consideration</button>
-          <button type="button" onClick={() => toggleCallout("important", "Important Note")} className="px-3 py-1.5 text-xs text-left hover:bg-slate-50 text-rose-700 font-medium">Important Note</button>
-          <button type="button" onClick={() => toggleCallout("exam_tip", "Board Review Point")} className="px-3 py-1.5 text-xs text-left hover:bg-slate-50 text-indigo-700">Board Review Point</button>
-          <button type="button" onClick={() => toggleCallout("definition", "Definition")} className="px-3 py-1.5 text-xs text-left hover:bg-slate-50 text-slate-700">Definition</button>
-          <button type="button" onClick={() => toggleCallout("warning", "Caution / Warning")} className="px-3 py-1.5 text-xs text-left hover:bg-slate-50 text-amber-700 font-medium">Caution / Warning</button>
+        <div className="absolute top-full left-0 mt-1 w-48 bg-surface border border-border shadow-float rounded-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all flex flex-col py-1 z-50">
+          <button type="button" onClick={() => toggleCallout("key_point", "Key Concept")} className="px-3 py-1.5 text-xs text-left hover:bg-surface-subtle text-foreground cursor-pointer">Key Concept</button>
+          <button type="button" onClick={() => toggleCallout("clinical_note", "Clinical Consideration")} className="px-3 py-1.5 text-xs text-left hover:bg-surface-subtle text-secondary font-medium cursor-pointer">Clinical Consideration</button>
+          <button type="button" onClick={() => toggleCallout("important", "Important Note")} className="px-3 py-1.5 text-xs text-left hover:bg-surface-subtle text-error font-medium cursor-pointer">Important Note</button>
+          <button type="button" onClick={() => toggleCallout("exam_tip", "Board Review Point")} className="px-3 py-1.5 text-xs text-left hover:bg-surface-subtle text-indigo-500 cursor-pointer">Board Review Point</button>
+          <button type="button" onClick={() => toggleCallout("definition", "Definition")} className="px-3 py-1.5 text-xs text-left hover:bg-surface-subtle text-foreground cursor-pointer">Definition</button>
+          <button type="button" onClick={() => toggleCallout("warning", "Caution / Warning")} className="px-3 py-1.5 text-xs text-left hover:bg-surface-subtle text-warning font-medium cursor-pointer">Caution / Warning</button>
         </div>
       </div>
 
       {/* Media & Tables */}
-      <div className="flex items-center gap-0.5 px-1.5 border-r border-slate-200">
+      <div className="flex items-center gap-0.5 px-1.5 border-r border-border">
         <ToolbarButton title="Upload Image (5MB max)" onClick={addImage}>
           <ImageIcon className="w-3.5 h-3.5" />
         </ToolbarButton>

@@ -39,9 +39,9 @@ export function SearchInput({ initialQuery = "" }: { initialQuery?: string }) {
 
   return (
     <form onSubmit={handleSearch} className="relative w-full max-w-2xl mx-auto">
-      <div className="relative flex items-center w-full h-12 rounded-xl border border-slate-200 bg-white px-3.5 focus-within:ring-2 focus-within:ring-primary focus-within:border-transparent transition-all shadow-xs">
+      <div className="relative flex items-center w-full h-13 rounded-2xl border border-border/80 bg-white px-4 focus-within:ring-2 focus-within:ring-primary focus-within:border-transparent transition-all shadow-xs">
         <SearchIcon
-          className="w-4 h-4 text-slate-400 shrink-0"
+          className="w-4 h-4 text-primary shrink-0"
           aria-hidden="true"
         />
         <input
@@ -49,19 +49,19 @@ export function SearchInput({ initialQuery = "" }: { initialQuery?: string }) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search clinical topics, diseases, procedures, or pharmacology..."
-          className="flex-1 border-0 outline-none px-3 h-full text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 bg-transparent font-normal"
+          className="flex-1 border-0 outline-none px-3 h-full text-xs sm:text-sm text-foreground placeholder:text-muted-foreground bg-transparent font-normal"
         />
         {query && (
           <button
             type="button"
             onClick={clearSearch}
-            className="p-1 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 shrink-0 transition-colors mr-1.5"
+            className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-surface-subtle shrink-0 transition-colors mr-2 cursor-pointer"
             aria-label="Clear search query"
           >
             <X className="w-4 h-4" />
           </button>
         )}
-        <Button type="submit" size="sm" className="shrink-0 font-medium">
+        <Button type="submit" size="sm" className="shrink-0 font-semibold rounded-xl">
           Search
         </Button>
       </div>

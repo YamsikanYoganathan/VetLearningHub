@@ -13,7 +13,6 @@ import {
   Trash2,
   Download,
   AlertCircle,
-  FileText
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -152,10 +151,10 @@ export default function NoteForm({ initialData, topics }: NoteFormProps) {
   return (
     <div className="max-w-6xl space-y-6">
       {/* Top Action Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4.5 rounded-2xl border border-border/80 shadow-2xs">
         <Link
           href="/admin/notes"
-          className="inline-flex items-center text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors"
+          className="inline-flex items-center text-xs font-semibold text-text-secondary hover:text-foreground transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5 mr-1" />
           <span>Back to Notes Directory</span>
@@ -173,7 +172,7 @@ export default function NoteForm({ initialData, topics }: NoteFormProps) {
             </Link>
           )}
 
-          <Button onClick={handleSubmit} disabled={loading} size="sm">
+          <Button onClick={handleSubmit} disabled={loading} size="sm" className="rounded-xl">
             {loading ? (
               <Loader2 className="w-3.5 h-3.5 animate-spin mr-1" />
             ) : (
@@ -186,7 +185,7 @@ export default function NoteForm({ initialData, topics }: NoteFormProps) {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {error && (
-          <div className="p-4 rounded-xl bg-red-50 text-red-700 text-xs font-medium border border-red-200">
+          <div className="p-4 rounded-2xl bg-error-subtle text-error text-xs font-medium border border-error/20">
             {error}
           </div>
         )}
@@ -194,10 +193,10 @@ export default function NoteForm({ initialData, topics }: NoteFormProps) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Main Writing Area (8 cols) */}
           <div className="lg:col-span-8 space-y-5">
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
+            <div className="bg-white p-6 rounded-2xl border border-border/80 shadow-2xs space-y-4">
               <div>
-                <label htmlFor="title" className="block text-xs font-semibold text-slate-700 mb-1">
-                  Note Title <span className="text-red-500">*</span>
+                <label htmlFor="title" className="block text-xs font-bold text-text-secondary mb-1">
+                  Note Title <span className="text-error">*</span>
                 </label>
                 <Input
                   id="title"
@@ -205,13 +204,13 @@ export default function NoteForm({ initialData, topics }: NoteFormProps) {
                   required
                   value={title}
                   onChange={handleTitleChange}
-                  className="text-base font-semibold"
+                  className="text-base font-semibold rounded-xl"
                   placeholder="e.g. Canine Cranial Cruciate Ligament Disease"
                 />
               </div>
 
               <div>
-                <label htmlFor="short_description" className="block text-xs font-semibold text-slate-700 mb-1">
+                <label htmlFor="short_description" className="block text-xs font-bold text-text-secondary mb-1">
                   Summary / Short Description
                 </label>
                 <textarea
@@ -219,7 +218,7 @@ export default function NoteForm({ initialData, topics }: NoteFormProps) {
                   rows={2}
                   value={shortDescription}
                   onChange={(e) => setShortDescription(e.target.value)}
-                  className="w-full px-3 py-2 rounded-md border border-slate-200 text-xs sm:text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent placeholder:text-slate-400 leading-relaxed"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-border/80 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent placeholder:text-muted-foreground leading-relaxed font-medium"
                   placeholder="Brief clinical synopsis displayed in directory searches and headers..."
                 />
               </div>
@@ -227,23 +226,23 @@ export default function NoteForm({ initialData, topics }: NoteFormProps) {
 
             {/* TipTap Rich Text Editor */}
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold text-slate-700">
-                Article Body (WYSIWYG)
+              <label className="block text-xs font-bold text-text-secondary">
+                Article Body (Modular Blocks)
               </label>
               <Editor initialContent={initialData?.content} onChange={setContent} />
             </div>
 
             {/* Media & Supporting Attachments Section */}
-            <div id="cms-tour-attachments" className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+            <div id="cms-tour-attachments" className="bg-white p-6 rounded-2xl border border-border/80 shadow-2xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-border/80">
                 <div>
                   <div className="flex items-center gap-2">
-                    <Paperclip className="w-4 h-4 text-teal-600" />
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900">
+                    <Paperclip className="w-4 h-4 text-secondary" />
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-foreground">
                       Supporting Study Resources & Attachments
                     </h3>
                   </div>
-                  <p className="text-xs text-slate-500 mt-0.5">
+                  <p className="text-xs text-text-secondary mt-0.5">
                     Attach reference PDFs, clinical guidelines, or lecture handouts (up to 20MB).
                   </p>
                 </div>
@@ -263,7 +262,7 @@ export default function NoteForm({ initialData, topics }: NoteFormProps) {
                     size="sm"
                     disabled={uploadingDoc}
                     onClick={() => fileInputRef.current?.click()}
-                    className="text-xs"
+                    className="text-xs rounded-xl"
                   >
                     {uploadingDoc ? (
                       <>
@@ -272,7 +271,7 @@ export default function NoteForm({ initialData, topics }: NoteFormProps) {
                       </>
                     ) : (
                       <>
-                        <Upload className="w-3.5 h-3.5 mr-1.5 text-teal-600" />
+                        <Upload className="w-3.5 h-3.5 mr-1.5 text-secondary" />
                         <span>Attach PDF / Document</span>
                       </>
                     )}
@@ -281,15 +280,15 @@ export default function NoteForm({ initialData, topics }: NoteFormProps) {
               </div>
 
               {docError && (
-                <div className="p-3 rounded-lg bg-red-50 text-red-700 text-xs font-medium border border-red-200 flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
+                <div className="p-3 rounded-xl bg-error-subtle text-error text-xs font-medium border border-error/20 flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
                   <span>{docError}</span>
                 </div>
               )}
 
               {/* List of Attached Documents */}
               {attachments.length === 0 ? (
-                <div className="p-6 rounded-lg border border-dashed border-slate-200 bg-slate-50/50 text-center text-xs text-slate-400">
+                <div className="p-6 rounded-2xl border border-dashed border-border bg-surface-subtle/50 text-center text-xs text-muted-foreground">
                   No supporting documents attached yet. Click &quot;Attach PDF / Document&quot; above to add study materials.
                 </div>
               ) : (
@@ -300,23 +299,23 @@ export default function NoteForm({ initialData, topics }: NoteFormProps) {
                     return (
                       <div
                         key={file.id}
-                        className="flex items-center justify-between p-3 rounded-lg border border-slate-200 bg-slate-50/60 hover:bg-slate-50 transition-colors"
+                        className="flex items-center justify-between p-3.5 rounded-2xl border border-border/80 bg-white hover:border-sky-300 transition-all shadow-2xs"
                       >
                         <div className="flex items-center gap-3 min-w-0 pr-3">
                           <span
-                            className={"w-8 h-8 rounded-md font-bold text-[10px] flex items-center justify-center shrink-0 " + (
+                            className={"w-8 h-8 rounded-xl font-bold text-[10px] flex items-center justify-center shrink-0 " + (
                               isPdf
-                                ? "bg-rose-100 border border-rose-200 text-rose-700"
-                                : "bg-sky-100 border border-sky-200 text-sky-700"
+                                ? "bg-rose-50 border border-rose-200 text-rose-700"
+                                : "bg-primary-subtle border border-primary/20 text-primary"
                             )}
                           >
                             {ext}
                           </span>
                           <div className="min-w-0">
-                            <p className="text-xs font-semibold text-slate-800 truncate" title={file.name}>
+                            <p className="text-xs font-semibold text-foreground truncate" title={file.name}>
                               {file.name}
                             </p>
-                            <p className="text-[11px] text-slate-400">
+                            <p className="text-[11px] text-muted-foreground">
                               {file.size
                                 ? file.size / (1024 * 1024) > 1
                                   ? (file.size / (1024 * 1024)).toFixed(1) + " MB"
@@ -332,7 +331,7 @@ export default function NoteForm({ initialData, topics }: NoteFormProps) {
                             target="_blank"
                             rel="noopener noreferrer"
                             download={file.name}
-                            className="p-1.5 rounded-md text-slate-500 hover:text-primary hover:bg-white transition-colors"
+                            className="p-2 rounded-xl text-text-secondary hover:text-foreground hover:bg-surface-subtle transition-colors"
                             title="Preview / Download file"
                             aria-label={"Download " + file.name}
                           >
@@ -341,7 +340,7 @@ export default function NoteForm({ initialData, topics }: NoteFormProps) {
                           <button
                             type="button"
                             onClick={() => handleRemoveAttachment(file.id)}
-                            className="p-1.5 rounded-md text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                            className="p-2 rounded-xl text-muted-foreground hover:text-error hover:bg-rose-50 transition-colors cursor-pointer"
                             title="Remove attachment"
                             aria-label={"Remove " + file.name}
                           >
@@ -358,21 +357,21 @@ export default function NoteForm({ initialData, topics }: NoteFormProps) {
 
           {/* Publishing Settings Sidebar (4 cols) */}
           <div className="lg:col-span-4 space-y-5">
-            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
-              <h2 className="text-xs font-bold uppercase tracking-wider text-slate-900 pb-2 border-b border-slate-100">
+            <div className="bg-white p-6 rounded-2xl border border-border/80 shadow-2xs space-y-4">
+              <h2 className="text-xs font-bold uppercase tracking-wider text-foreground pb-2 border-b border-border/80">
                 Publishing Details
               </h2>
 
               {/* Status */}
               <div>
-                <label htmlFor="status" className="block text-xs font-medium text-slate-600 mb-1">
+                <label htmlFor="status" className="block text-xs font-bold text-text-secondary mb-1">
                   Publication Status
                 </label>
                 <select
                   id="status"
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
-                  className="w-full px-3 py-2 rounded-md bg-white border border-slate-200 text-xs sm:text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary font-medium"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-border/80 text-xs sm:text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary font-medium"
                 >
                   <option value="draft">Draft (Private to Editors)</option>
                   <option value="in_review">In Review</option>
@@ -383,15 +382,15 @@ export default function NoteForm({ initialData, topics }: NoteFormProps) {
 
               {/* Location Topic */}
               <div>
-                <label htmlFor="topic_id" className="block text-xs font-medium text-slate-600 mb-1">
-                  Curriculum Topic <span className="text-red-500">*</span>
+                <label htmlFor="topic_id" className="block text-xs font-bold text-text-secondary mb-1">
+                  Curriculum Topic <span className="text-error">*</span>
                 </label>
                 <select
                   id="topic_id"
                   required
                   value={topicId}
                   onChange={(e) => setTopicId(e.target.value)}
-                  className="w-full px-3 py-2 rounded-md bg-white border border-slate-200 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary truncate"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-border/80 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-primary truncate font-medium"
                 >
                   <option value="" disabled>Select parent topic...</option>
                   {topics.map((t) => {
@@ -412,8 +411,8 @@ export default function NoteForm({ initialData, topics }: NoteFormProps) {
 
               {/* Slug */}
               <div>
-                <label htmlFor="slug" className="block text-xs font-medium text-slate-600 mb-1">
-                  URL Slug <span className="text-red-500">*</span>
+                <label htmlFor="slug" className="block text-xs font-bold text-text-secondary mb-1">
+                  URL Slug <span className="text-error">*</span>
                 </label>
                 <Input
                   id="slug"
@@ -421,13 +420,13 @@ export default function NoteForm({ initialData, topics }: NoteFormProps) {
                   required
                   value={slug}
                   onChange={(e) => setSlug(e.target.value)}
-                  className="font-mono text-xs"
+                  className="font-mono text-xs rounded-xl"
                 />
               </div>
 
               {/* Reading Time */}
               <div>
-                <label htmlFor="reading_time" className="block text-xs font-medium text-slate-600 mb-1">
+                <label htmlFor="reading_time" className="block text-xs font-bold text-text-secondary mb-1">
                   Reading Time (minutes)
                 </label>
                 <Input
@@ -437,13 +436,13 @@ export default function NoteForm({ initialData, topics }: NoteFormProps) {
                   max="120"
                   value={readingTime}
                   onChange={(e) => setReadingTime(e.target.value)}
-                  className="text-xs"
+                  className="text-xs rounded-xl"
                 />
               </div>
 
               {/* Sort Order */}
               <div>
-                <label htmlFor="sort_order" className="block text-xs font-medium text-slate-600 mb-1">
+                <label htmlFor="sort_order" className="block text-xs font-bold text-text-secondary mb-1">
                   Topic Sort Index
                 </label>
                 <Input
@@ -451,7 +450,7 @@ export default function NoteForm({ initialData, topics }: NoteFormProps) {
                   type="number"
                   value={sortOrder}
                   onChange={(e) => setSortOrder(e.target.value)}
-                  className="text-xs"
+                  className="text-xs rounded-xl"
                 />
               </div>
             </div>

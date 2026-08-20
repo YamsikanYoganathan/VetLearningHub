@@ -1,5 +1,6 @@
 import React from "react";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
+import { ShieldCheck } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -16,18 +17,29 @@ export default function PrivacyPage() {
         className="mb-8"
       />
 
-      <div className="mb-10 pb-6 border-b border-slate-200">
-        <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight mb-2">
+      <div className="mb-10 pb-6 border-b border-border">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight mb-2">
           Privacy Policy
         </h1>
-        <p className="text-xs font-mono uppercase tracking-wider text-slate-400">
+        <p className="text-xs font-mono uppercase tracking-wider text-muted-foreground">
           Last updated: {new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
         </p>
       </div>
 
-      <div className="space-y-8 text-sm sm:text-base text-slate-700 leading-relaxed">
+      {/* Clinical Reference Notice */}
+      <div className="p-5 rounded-2xl bg-sky-50/70 border border-sky-200 text-xs sm:text-sm text-sky-950 mb-8 flex items-start gap-3.5 shadow-2xs">
+        <ShieldCheck className="w-5 h-5 text-sky-600 shrink-0 mt-0.5" />
+        <div className="space-y-1">
+          <p className="font-bold text-sky-900">Academic & Educational Reference Notice</p>
+          <p className="leading-relaxed text-sky-800">
+            For academic study and educational reference only. Consult licensed clinical protocols and professional diagnostic guidance for clinical interventions.
+          </p>
+        </div>
+      </div>
+
+      <div className="space-y-8 text-sm sm:text-base text-text-secondary leading-relaxed">
         <section>
-          <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight mb-2">
+          <h2 className="text-lg sm:text-xl font-bold text-foreground tracking-tight mb-2">
             1. Open Reference Platform & Data Minimization
           </h2>
           <p>
@@ -35,8 +47,8 @@ export default function PrivacyPage() {
           </p>
         </section>
 
-        <section className="pt-6 border-t border-slate-200">
-          <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight mb-2">
+        <section className="pt-6 border-t border-border">
+          <h2 className="text-lg sm:text-xl font-bold text-foreground tracking-tight mb-2">
             2. Authentication & Editorial Session Management
           </h2>
           <p>
@@ -44,8 +56,8 @@ export default function PrivacyPage() {
           </p>
         </section>
 
-        <section className="pt-6 border-t border-slate-200">
-          <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight mb-2">
+        <section className="pt-6 border-t border-border">
+          <h2 className="text-lg sm:text-xl font-bold text-foreground tracking-tight mb-2">
             3. Infrastructure & Cryptographic Security
           </h2>
           <p>

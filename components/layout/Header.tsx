@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { Search, Menu, ChevronDown } from "lucide-react";
+import { Search, Menu, ChevronDown, ArrowRight } from "lucide-react";
 import { SyllabusMegaMenu } from "./SyllabusMegaMenu";
 import { MobileNavDrawer } from "./MobileNavDrawer";
 import { type AcademicArea } from "@/lib/supabase/queries";
@@ -30,7 +30,7 @@ export function Header({ areas = [] }: HeaderProps) {
     }
   }, []);
 
-  // Scroll listener for sticky header transition (200-300ms)
+  // Scroll listener for sticky header transition
   React.useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 12);
@@ -75,8 +75,8 @@ export function Header({ areas = [] }: HeaderProps) {
   return (
     <header
       className={`sticky top-0 z-40 w-full transition-all duration-200 ${isScrolled
-        ? "border-b border-slate-200/90 bg-white/95 backdrop-blur-md shadow-xs py-0"
-        : "border-b border-slate-200/60 bg-white py-0.5"
+        ? "border-b border-border bg-white/95 backdrop-blur-xl shadow-xs py-0"
+        : "border-b border-border/60 bg-white/80 backdrop-blur-md py-0.5"
         }`}
       onMouseLeave={handleSyllabusMouseLeave}
     >
@@ -85,36 +85,36 @@ export function Header({ areas = [] }: HeaderProps) {
         <div className="flex items-center">
           <Link
             href="/"
-            className="flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded py-1 transition-opacity hover:opacity-95"
+            className="flex items-center focus-ring rounded-lg py-1 transition-opacity hover:opacity-90"
             aria-label="Vetulan Service Home"
           >
-            {/* Desktop Brand Logo (150-175px width target) */}
+            {/* Desktop Brand Logo */}
             <Image
               src="/logo-desktop.svg"
               alt="Vetulan Service"
               width={160}
               height={40}
-              className="hidden sm:block h-16 w-auto"
+              className="hidden sm:block h-12 lg:h-14 w-auto object-contain"
               priority
             />
-            {/* Mobile Dedicated Brand Logo (42-48px target) */}
+            {/* Mobile Brand Logo */}
             <div className="flex sm:hidden items-center gap-2">
               <Image
                 src="/logo-desktop.svg"
                 alt="Vetulan Service"
-                width={40}
+                width={160}
                 height={40}
-                className="h-12 w-auto"
+                className="h-12 lg:h-14 object-contain"
                 priority
               />
             </div>
           </Link>
         </div>
 
-        {/* Zone 2 (Center): Genuinely Visually Centered Primary Links (Syllabus, About Us, Contact Us) */}
+        {/* Zone 2 (Center): Visually Centered Primary Links (Syllabus, About Us, Resources) */}
         <nav
           aria-label="Primary Navigation"
-          className="hidden md:flex items-center gap-8 text-[13.5px] font-medium text-slate-600 absolute left-1/2 -translate-x-1/2"
+          className="hidden md:flex items-center gap-8 text-[13.5px] font-medium text-text-secondary absolute left-1/2 -translate-x-1/2"
         >
           {/* Syllabus Item with Mega Menu Trigger */}
           <div
@@ -127,14 +127,14 @@ export function Header({ areas = [] }: HeaderProps) {
               onClick={() => setIsSyllabusOpen((prev) => !prev)}
               aria-expanded={isSyllabusOpen}
               aria-controls="syllabus-mega-menu"
-              className={`inline-flex items-center gap-1.5 py-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded ${isSyllabusOpen || pathname.startsWith("/subjects")
-                ? "text-slate-900 font-semibold"
-                : "hover:text-slate-900"
+              className={`inline-flex items-center gap-1.5 py-1.5 transition-colors focus-ring rounded-md cursor-pointer ${isSyllabusOpen || pathname.startsWith("/subjects")
+                ? "text-primary font-semibold"
+                : "hover:text-foreground"
                 }`}
             >
               <span>Syllabus</span>
               <ChevronDown
-                className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${isSyllabusOpen ? "rotate-180 text-primary" : ""
+                className={`w-3.5 h-3.5 text-muted-foreground transition-transform duration-200 ${isSyllabusOpen ? "rotate-180 text-primary" : ""
                   }`}
               />
             </button>
@@ -144,55 +144,40 @@ export function Header({ areas = [] }: HeaderProps) {
           <Link
             href="/about"
             className={`py-1.5 transition-colors relative ${pathname === "/about"
-              ? "text-slate-900 font-semibold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-primary after:rounded-full"
-              : "hover:text-slate-900"
+              ? "text-primary font-semibold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-primary after:rounded-full"
+              : "hover:text-foreground"
               }`}
           >
             About Us
           </Link>
 
-          {/* Contact Us Link */}
+          {/* Resources Link */}
           <Link
-            href="/contact"
-            className={`py-1.5 transition-colors relative ${pathname === "/contact"
-              ? "text-slate-900 font-semibold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-primary after:rounded-full"
-              : "hover:text-slate-900"
+            href="/resources"
+            className={`py-1.5 transition-colors relative ${pathname === "/resources"
+              ? "text-primary font-semibold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-primary after:rounded-full"
+              : "hover:text-foreground"
               }`}
           >
-            Contact Us
+            Resources
           </Link>
         </nav>
 
-        {/* Zone 3 (Right): Search Trigger */}
-        <div className="flex items-center gap-2.5">
-          {/* Desktop Search Button */}
+        {/* Zone 3 (Right): Search & Contact Us CTA */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Contact Us CTA Button */}
           <Link
-            href="/search"
-            className="hidden sm:inline-flex items-center gap-2.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50/80 text-slate-600 hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900 text-xs font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary shadow-2xs group"
-            aria-label="Search clinical notes"
+            href="/contact"
+            className="sm:inline-flex hidden items-center gap-1.5 px-5 py-2.5 rounded-xl bg-primary text-white hover:bg-primary-hover text-sm font-semibold shadow-xs transition-all active:scale-[0.98]"
           >
-            <Search className="h-3.5 w-3.5 text-slate-400 group-hover:text-primary transition-colors" />
-            <span className="text-slate-600 group-hover:text-slate-900 font-medium">
-              Search
-            </span>
-            <kbd className="hidden lg:inline-block rounded bg-white px-1.5 py-0.5 text-[10px] font-semibold text-slate-400 border border-slate-200 shadow-2xs">
-              {isMac ? "⌘K" : "Ctrl K"}
-            </kbd>
+            <span>Contact Us</span>
+            <ArrowRight className="w-3 h-3 ml-0.5" />
           </Link>
 
-          {/* Mobile Search Icon */}
-          <Link
-            href="/search"
-            className="sm:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-colors"
-            aria-label="Search notes"
-          >
-            <Search className="h-5 w-5" />
-          </Link>
-
-          {/* Mobile Menu Toggle Button */}
+          {/* Mobile Menu Drawer Toggle Button */}
           <button
             type="button"
-            className="inline-flex md:hidden items-center justify-center p-2 rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary transition-colors"
+            className="inline-flex md:hidden items-center justify-center p-2 rounded-xl text-text-secondary hover:bg-surface-subtle hover:text-foreground focus-ring transition-colors cursor-pointer"
             onClick={() => setIsMobileMenuOpen(true)}
             aria-label="Open navigation menu"
           >

@@ -69,10 +69,10 @@ export function SearchFilters({ data }: { data: CategoryData }) {
   const hasFilters = Boolean(currentArea || currentSubject || currentTopic);
 
   return (
-    <div className="bg-slate-50/80 border border-slate-200 rounded-xl p-4 sm:p-5 mb-8">
-      <div className="flex items-center justify-between mb-3.5">
-        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-700">
-          <SlidersHorizontal className="w-3.5 h-3.5 text-sky-600" />
+    <div className="bg-white border border-border/80 rounded-2xl p-5 sm:p-6 mb-8 shadow-xs">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-text-secondary">
+          <SlidersHorizontal className="w-3.5 h-3.5 text-primary" />
           <span>Filter by Curriculum Hierarchy</span>
         </div>
 
@@ -80,7 +80,7 @@ export function SearchFilters({ data }: { data: CategoryData }) {
           <button
             type="button"
             onClick={clearFilters}
-            className="inline-flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-red-600 transition-colors"
+            className="inline-flex items-center gap-1 text-xs font-semibold text-text-secondary hover:text-error transition-colors cursor-pointer"
           >
             <X className="w-3.5 h-3.5" />
             <span>Reset filters</span>
@@ -91,14 +91,14 @@ export function SearchFilters({ data }: { data: CategoryData }) {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {/* Area Filter */}
         <div>
-          <label className="block text-[11px] font-medium text-slate-500 mb-1">
+          <label className="block text-[11px] font-semibold text-text-secondary mb-1">
             Academic Area
           </label>
           <select
             value={currentArea}
             onChange={(e) => handleFilterChange("area", e.target.value)}
             disabled={isPending}
-            className="w-full px-3 py-1.5 rounded-md bg-white border border-slate-200 text-slate-800 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50"
+            className="w-full px-3 py-2 rounded-lg bg-surface-subtle border border-border/80 text-foreground text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50 font-medium"
           >
             <option value="">All Academic Areas</option>
             {data.areas.map((a) => (
@@ -111,14 +111,14 @@ export function SearchFilters({ data }: { data: CategoryData }) {
 
         {/* Subject Filter */}
         <div>
-          <label className="block text-[11px] font-medium text-slate-500 mb-1">
+          <label className="block text-[11px] font-semibold text-text-secondary mb-1">
             Subject
           </label>
           <select
             value={currentSubject}
             onChange={(e) => handleFilterChange("subject", e.target.value)}
             disabled={isPending || availableSubjects.length === 0}
-            className="w-full px-3 py-1.5 rounded-md bg-white border border-slate-200 text-slate-800 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50"
+            className="w-full px-3 py-2 rounded-lg bg-surface-subtle border border-border/80 text-foreground text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50 font-medium"
           >
             <option value="">All Subjects</option>
             {availableSubjects.map((s) => (
@@ -131,14 +131,14 @@ export function SearchFilters({ data }: { data: CategoryData }) {
 
         {/* Topic Filter */}
         <div>
-          <label className="block text-[11px] font-medium text-slate-500 mb-1">
+          <label className="block text-[11px] font-semibold text-text-secondary mb-1">
             Topic
           </label>
           <select
             value={currentTopic}
             onChange={(e) => handleFilterChange("topic", e.target.value)}
             disabled={isPending || availableTopics.length === 0}
-            className="w-full px-3 py-1.5 rounded-md bg-white border border-slate-200 text-slate-800 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50"
+            className="w-full px-3 py-2 rounded-lg bg-surface-subtle border border-border/80 text-foreground text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:opacity-50 font-medium"
           >
             <option value="">All Topics</option>
             {availableTopics.map((t) => (
@@ -151,8 +151,8 @@ export function SearchFilters({ data }: { data: CategoryData }) {
       </div>
 
       {isPending && (
-        <div className="flex items-center justify-center mt-3 text-xs text-slate-500">
-          <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin text-sky-600" />
+        <div className="flex items-center justify-center mt-3 text-xs text-primary font-medium">
+          <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin text-primary" />
           <span>Updating results...</span>
         </div>
       )}

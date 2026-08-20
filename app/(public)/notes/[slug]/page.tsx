@@ -8,7 +8,6 @@ import {
   ChevronRight,
   Hash,
   FileText,
-  BookOpen,
   ArrowRight,
   Sparkles,
 } from "lucide-react";
@@ -120,18 +119,18 @@ export default async function NotePage({ params }: NotePageProps) {
       {/* Breadcrumb Trail */}
       <Breadcrumb items={breadcrumbItems} className="mb-6 sm:mb-8" />
 
-      {/* Layout Grid: 3-column strictly on xl+ (1280px+), responsive below */}
+      {/* Layout Grid: 3-column on xl+ (1280px+), responsive below */}
       <div className="flex flex-col xl:flex-row gap-8 lg:gap-12 items-start relative">
         {/* Left Topic Navigator (Sticky on xl+, hidden on mobile/tablet) */}
         {topic && siblingNotes.length > 1 && (
           <aside className="hidden xl:block w-64 shrink-0 sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto pr-2">
-            <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-4">
-              <div className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2 pb-2 border-b border-slate-200">
-                <Hash className="w-3.5 h-3.5 text-teal-600" />
+            <div className="rounded-2xl border border-border/80 bg-white p-5 shadow-2xs">
+              <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-secondary mb-2.5 pb-2.5 border-b border-border/80">
+                <Hash className="w-3.5 h-3.5 text-secondary" />
                 <span>Topic Navigator</span>
               </div>
               <h2
-                className="font-bold text-slate-900 text-xs mb-3 truncate leading-snug"
+                className="font-bold text-foreground text-xs mb-3 truncate leading-snug"
                 title={topic.name}
               >
                 {topic.name}
@@ -143,15 +142,15 @@ export default async function NotePage({ params }: NotePageProps) {
                     <li key={sibling.id}>
                       <Link
                         href={"/notes/" + sibling.slug}
-                        className={"flex items-start gap-2 px-2.5 py-1.5 rounded-md text-xs transition-colors " + (
+                        className={"flex items-start gap-2 px-3 py-2 rounded-xl text-xs transition-colors " + (
                           isActive
-                            ? "bg-sky-50 text-sky-800 font-semibold border-l-2 border-primary"
-                            : "text-slate-600 hover:bg-slate-100/80 hover:text-slate-900"
+                            ? "bg-primary-subtle text-primary font-semibold border-l-2 border-primary"
+                            : "text-text-secondary hover:bg-surface-subtle hover:text-foreground"
                         )}
                       >
                         <FileText
                           className={"w-3.5 h-3.5 shrink-0 mt-0.5 " + (
-                            isActive ? "text-primary" : "text-slate-400"
+                            isActive ? "text-primary" : "text-muted-foreground"
                           )}
                         />
                         <span className="leading-snug line-clamp-2">
@@ -176,12 +175,12 @@ export default async function NotePage({ params }: NotePageProps) {
           )}
 
           {/* Article Editorial Header */}
-          <header className="mb-8 pb-6 border-b border-slate-200">
+          <header className="mb-8 pb-6 border-b border-border/80">
             {/* Top Toolbar Row */}
             <div className="flex items-center justify-between gap-4 mb-3">
               {subject && (
-                <div className="flex items-center gap-2 text-xs font-semibold text-teal-800 bg-teal-50 border border-teal-100 px-2.5 py-0.5 rounded-md w-fit">
-                  <Layers className="w-3.5 h-3.5 text-teal-600" />
+                <div className="flex items-center gap-2 text-xs font-semibold text-secondary bg-secondary-subtle border border-secondary/20 px-3 py-1 rounded-md w-fit">
+                  <Layers className="w-3.5 h-3.5 text-secondary" />
                   <span>{subject.name}</span>
                 </div>
               )}
@@ -189,23 +188,23 @@ export default async function NotePage({ params }: NotePageProps) {
               <NoteUtilityBar title={note.title} />
             </div>
 
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 tracking-tight mb-3 leading-tight text-balance">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-foreground tracking-tight mb-3 leading-tight text-balance">
               {note.title}
             </h1>
 
             {note.short_description && (
-              <p className="text-base sm:text-lg text-slate-600 leading-relaxed mb-4 text-balance">
+              <p className="text-base sm:text-lg text-text-secondary leading-relaxed mb-4 text-balance">
                 {note.short_description}
               </p>
             )}
 
             {/* Metadata Bar */}
-            <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 font-medium pt-2 border-t border-slate-100">
-              <div className="flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 text-slate-400" />
+            <div className="flex flex-wrap items-center gap-4 text-xs text-muted-foreground font-medium pt-2.5 border-t border-border/80">
+              <div className="flex items-center gap-1.5 text-text-secondary font-medium">
+                <Clock className="w-3.5 h-3.5 text-muted-foreground" />
                 <span>{note.reading_time || 5} min study read</span>
               </div>
-              <span className="text-slate-300">•</span>
+              <span className="text-border">•</span>
               <div>
                 <span>
                   Updated{" "}
@@ -227,17 +226,17 @@ export default async function NotePage({ params }: NotePageProps) {
 
           {/* Prev / Next Note Sequential Navigation */}
           {(prevNote || nextNote) && (
-            <div className="mt-12 pt-6 border-t border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="mt-12 pt-6 border-t border-border/80 grid grid-cols-1 sm:grid-cols-2 gap-4">
               {prevNote ? (
                 <Link
                   href={"/notes/" + prevNote.slug}
-                  className="group flex flex-col p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 hover:shadow-xs transition-all text-left"
+                  className="group flex flex-col p-4 sm:p-5 rounded-2xl border border-border/80 bg-white hover:border-sky-300 hover:shadow-xs transition-all text-left shadow-2xs"
                 >
-                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1 group-hover:text-primary transition-colors">
+                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1 group-hover:text-primary transition-colors">
                     <ChevronLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />{" "}
                     Previous in topic
                   </span>
-                  <span className="text-sm font-semibold text-slate-900 group-hover:text-primary transition-colors line-clamp-1">
+                  <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
                     {prevNote.title}
                   </span>
                 </Link>
@@ -248,13 +247,13 @@ export default async function NotePage({ params }: NotePageProps) {
               {nextNote && (
                 <Link
                   href={"/notes/" + nextNote.slug}
-                  className="group flex flex-col p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 hover:shadow-xs transition-all text-right sm:col-start-2"
+                  className="group flex flex-col p-4 sm:p-5 rounded-2xl border border-border/80 bg-white hover:border-sky-300 hover:shadow-xs transition-all text-right sm:col-start-2 shadow-2xs"
                 >
-                  <span className="inline-flex items-center justify-end gap-1 text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1 group-hover:text-primary transition-colors">
+                  <span className="inline-flex items-center justify-end gap-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-1 group-hover:text-primary transition-colors">
                     Next in topic{" "}
                     <ChevronRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
                   </span>
-                  <span className="text-sm font-semibold text-slate-900 group-hover:text-primary transition-colors line-clamp-1">
+                  <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
                     {nextNote.title}
                   </span>
                 </Link>
@@ -264,8 +263,8 @@ export default async function NotePage({ params }: NotePageProps) {
 
           {/* Continue Studying / Related Notes Section */}
           {relatedNotes.length > 0 && (
-            <div className="mt-12 pt-8 border-t border-slate-200">
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-900 mb-4">
+            <div className="mt-12 pt-8 border-t border-border/80">
+              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-foreground mb-4">
                 <Sparkles className="w-4 h-4 text-primary" />
                 <span>Continue Studying in this Module</span>
               </div>
@@ -275,18 +274,18 @@ export default async function NotePage({ params }: NotePageProps) {
                   <Link
                     key={rel.id}
                     href={"/notes/" + rel.slug}
-                    className="group p-4 rounded-xl border border-slate-200 bg-white hover:border-slate-300 hover:shadow-2xs transition-all flex flex-col justify-between"
+                    className="group p-4 sm:p-5 rounded-2xl border border-border/80 bg-white hover:border-sky-300 hover:shadow-xs transition-all flex flex-col justify-between shadow-2xs"
                   >
                     <div>
-                      <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">
+                      <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block mb-1">
                         {topic?.name || "Clinical Topic"}
                       </span>
-                      <h3 className="font-bold text-sm text-slate-900 group-hover:text-primary transition-colors line-clamp-2 mb-2">
+                      <h3 className="font-bold text-sm text-foreground group-hover:text-primary transition-colors line-clamp-2 mb-2">
                         {rel.title}
                       </h3>
                     </div>
 
-                    <div className="flex items-center justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
+                    <div className="flex items-center justify-between text-xs text-muted-foreground pt-2.5 border-t border-border/80">
                       <span>{rel.reading_time || 5} min read</span>
                       <ArrowRight className="w-3.5 h-3.5 text-primary group-hover:translate-x-0.5 transition-transform" />
                     </div>

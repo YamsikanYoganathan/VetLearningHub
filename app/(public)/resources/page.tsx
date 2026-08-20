@@ -1,15 +1,12 @@
 import React from "react";
 import Link from "next/link";
 import {
-  BookOpen,
-  FileText,
   Pill,
   HeartPulse,
   Microscope,
   Activity,
   ArrowRight,
   Sparkles,
-  Layers,
   Search,
   CheckCircle2,
 } from "lucide-react";
@@ -85,41 +82,41 @@ export default async function ResourcesPage() {
   ];
 
   return (
-    <div className="relative min-h-screen bg-white">
+    <div className="relative min-h-screen bg-background text-foreground bg-atmosphere">
       <AtmosphericBackground variant="subtle" />
 
       <div className="container-page py-12 sm:py-16 relative">
         {/* Page Header */}
         <div className="max-w-3xl mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold tracking-tight mb-4">
-            <Sparkles className="w-3.5 h-3.5 text-primary" />
-            <span>Curriculum Study Tools</span>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary-subtle border border-primary/20 text-primary text-xs font-bold tracking-tight mb-4 shadow-2xs">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>CURRICULUM STUDY TOOLS</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight leading-tight mb-4">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight leading-tight mb-4">
             Clinical Reference & Study Resources
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+          <p className="text-base sm:text-lg text-text-secondary leading-relaxed">
             Essential diagnostic algorithms, pharmacological formulary references, and anatomical guides designed for veterinary students and clinical interns.
           </p>
         </div>
 
         {/* Quick Search Banner */}
-        <div className="mb-14 p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-slate-50 via-white to-sky-50/40 border border-slate-200/90 shadow-xs">
+        <div className="mb-14 p-6 sm:p-8 rounded-2xl bg-white border border-border/80 shadow-xs">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="space-y-1">
-              <h2 className="text-lg font-bold text-slate-900">
+              <h2 className="text-lg font-bold text-foreground">
                 Looking for a specific disease, surgical protocol, or drug?
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600">
+              <p className="text-xs sm:text-sm text-text-secondary">
                 Search across all published notes and structured clinical matrices.
               </p>
             </div>
 
             <Link
               href="/search"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-white hover:bg-primary-hover text-xs sm:text-sm font-semibold transition-all shadow-xs shrink-0"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white hover:bg-primary-hover text-xs sm:text-sm font-semibold transition-all shadow-xs shrink-0"
             >
               <Search className="w-4 h-4" />
               <span>Search Knowledge Base</span>
@@ -136,40 +133,40 @@ export default async function ResourcesPage() {
             return (
               <div
                 key={res.id}
-                className="group relative bg-white rounded-2xl border border-slate-200 p-6 sm:p-7 shadow-xs hover:border-slate-300 hover:shadow-md transition-all duration-200 flex flex-col justify-between"
+                className="group relative bg-white rounded-2xl border border-border/80 p-6 sm:p-7 shadow-xs hover:border-sky-300 hover:shadow-md transition-all duration-200 flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-start justify-between gap-4 mb-4">
                     <div className="flex items-center gap-3">
-                      <span className="font-mono text-xs font-semibold text-slate-400">
+                      <span className="font-mono text-xs font-bold text-muted-foreground">
                         {numberFormatted}
                       </span>
-                      <div className="w-9 h-9 rounded-lg bg-slate-50 text-slate-700 flex items-center justify-center border border-slate-200/80 group-hover:bg-sky-50 group-hover:text-primary group-hover:border-sky-200 transition-colors">
+                      <div className="w-9 h-9 rounded-xl bg-primary-subtle text-primary flex items-center justify-center border border-primary/20 group-hover:bg-primary group-hover:text-white transition-colors shadow-2xs">
                         <IconComponent className="w-4 h-4" />
                       </div>
                     </div>
 
-                    <span className="text-[11px] font-semibold text-teal-800 bg-teal-50 px-2.5 py-0.5 rounded-md border border-teal-100">
+                    <span className="text-[11px] font-semibold text-secondary bg-secondary-subtle px-2.5 py-0.5 rounded-md border border-secondary/20">
                       {res.badge}
                     </span>
                   </div>
 
-                  <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-primary transition-colors tracking-tight">
+                  <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors tracking-tight">
                     {res.title}
                   </h3>
 
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-5">
+                  <p className="text-xs sm:text-sm text-text-secondary leading-relaxed mb-5">
                     {res.description}
                   </p>
 
-                  <div className="space-y-2 pt-4 border-t border-slate-100 mb-6">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400 block mb-1">
+                  <div className="space-y-2 pt-4 border-t border-border/80 mb-6">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground block mb-1">
                       Featured Modules:
                     </span>
                     {res.items.map((item) => (
                       <div
                         key={item}
-                        className="flex items-center gap-2 text-xs text-slate-700"
+                        className="flex items-center gap-2 text-xs text-text-secondary"
                       >
                         <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />
                         <span className="line-clamp-1">{item}</span>
@@ -180,7 +177,7 @@ export default async function ResourcesPage() {
 
                 <Link
                   href={res.href}
-                  className="inline-flex items-center justify-between w-full pt-4 border-t border-slate-100 text-xs font-semibold text-primary group-hover:underline underline-offset-4"
+                  className="inline-flex items-center justify-between w-full pt-4 border-t border-border/80 text-xs font-semibold text-primary group-hover:underline underline-offset-4"
                 >
                   <span>Explore resource database</span>
                   <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
@@ -192,13 +189,13 @@ export default async function ResourcesPage() {
 
         {/* Academic Syllabus Quick Overview */}
         {areas && areas.length > 0 && (
-          <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-6 sm:p-8">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-200">
+          <div className="rounded-2xl border border-border/80 bg-surface-subtle/70 p-6 sm:p-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-border/80">
               <div>
-                <h2 className="text-lg font-bold text-slate-900">
+                <h2 className="text-lg font-bold text-foreground">
                   Curriculum Academic Disciplines
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-500">
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   Access notes structured sequentially by foundational and clinical branches.
                 </p>
               </div>
@@ -212,17 +209,17 @@ export default async function ResourcesPage() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5">
               {areas.map((area) => (
                 <Link
                   key={area.id}
                   href={`/subjects/${area.slug}`}
-                  className="p-3 rounded-xl bg-white border border-slate-200/80 hover:border-slate-300 hover:shadow-2xs transition-all text-left"
+                  className="p-4 rounded-xl bg-white border border-border/80 hover:border-sky-300 hover:shadow-2xs transition-all text-left"
                 >
-                  <span className="text-xs font-semibold text-slate-900 block truncate">
+                  <span className="text-xs font-bold text-foreground block truncate">
                     {area.name}
                   </span>
-                  <span className="text-[10px] text-slate-400 uppercase tracking-wider font-medium">
+                  <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold">
                     Curriculum Branch
                   </span>
                 </Link>

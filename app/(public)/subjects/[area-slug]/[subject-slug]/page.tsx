@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Layers, Hash, FileText, ArrowRight } from "lucide-react";
+import { Layers, FileText, ArrowRight } from "lucide-react";
 import { getSubjectBySlug, getTopicsBySubject } from "@/lib/supabase/queries";
 import { createClient } from "@/lib/supabase/server";
 import { NoteRow } from "@/components/ui/NoteRow";
@@ -69,7 +69,7 @@ export default async function SubjectPage({
       {/* Breadcrumb */}
       <Breadcrumb
         items={[
-          { label: "Academic Directory", href: "/subjects" },
+          { label: "Syllabus Directory", href: "/subjects" },
           { label: area.name, href: `/subjects/${area.slug}` },
           { label: subject.name, isCurrent: true },
         ]}
@@ -78,15 +78,15 @@ export default async function SubjectPage({
 
       {/* Editorial Subject Header */}
       <div className="max-w-3xl mb-12">
-        <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-teal-50 text-teal-800 border border-teal-100 text-xs font-semibold tracking-tight mb-4">
-          <Layers className="w-3.5 h-3.5 text-teal-600" />
-          <span>Curriculum Subject</span>
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-subtle text-secondary border border-secondary/20 text-xs font-semibold tracking-tight mb-4 shadow-2xs">
+          <Layers className="w-3.5 h-3.5" />
+          <span>Curriculum Subject Course</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight mb-3">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground tracking-tight mb-4">
           {subject.name}
         </h1>
         {subject.description && (
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+          <p className="text-base sm:text-lg text-text-secondary leading-relaxed">
             {subject.description}
           </p>
         )}
@@ -102,22 +102,22 @@ export default async function SubjectPage({
 
             return (
               <section key={topic.id} className="scroll-mt-24" id={topic.slug}>
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 pb-3 mb-6 gap-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-border pb-3 mb-6 gap-2">
                   <div className="flex items-start gap-3">
-                    <span className="font-mono text-xs font-bold text-slate-400 mt-1">
+                    <span className="font-mono text-xs font-bold text-muted-foreground mt-1">
                       {indexStr}
                     </span>
                     <div>
-                      <h2 className="text-lg sm:text-xl font-bold text-slate-900">
+                      <h2 className="text-lg sm:text-xl font-bold text-foreground">
                         <Link
                           href={`/subjects/${area.slug}/${subject.slug}/${topic.slug}`}
-                          className="hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+                          className="hover:text-primary transition-colors focus-ring rounded"
                         >
                           {topic.name}
                         </Link>
                       </h2>
                       {topic.description && (
-                        <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+                        <p className="text-xs sm:text-sm text-muted-foreground mt-0.5">
                           {topic.description}
                         </p>
                       )}
@@ -162,7 +162,7 @@ export default async function SubjectPage({
                     ))}
                   </div>
                 ) : (
-                  <div className="py-8 text-center bg-slate-50 border border-slate-200 border-dashed rounded-xl text-slate-500 text-xs">
+                  <div className="py-8 text-center bg-surface-subtle border border-border border-dashed rounded-xl text-muted-foreground text-xs">
                     No published notes in this topic module yet.
                   </div>
                 )}
@@ -170,12 +170,12 @@ export default async function SubjectPage({
             );
           })
         ) : (
-          <div className="text-center py-16 border border-slate-200 border-dashed rounded-xl bg-slate-50 text-slate-500 text-sm">
-            <FileText className="w-10 h-10 text-slate-400 mx-auto mb-3" />
-            <p className="font-medium text-slate-700">
+          <div className="text-center py-16 border border-border border-dashed rounded-2xl bg-surface-subtle text-muted-foreground text-sm">
+            <FileText className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+            <p className="font-medium text-foreground">
               No active topics found for this subject
             </p>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Clinical topics and study notes will appear here once published.
             </p>
           </div>

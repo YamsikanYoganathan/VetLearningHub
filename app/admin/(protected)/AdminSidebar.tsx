@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -26,6 +26,18 @@ interface AdminSidebarProps {
 export default function AdminSidebar({ role, email }: AdminSidebarProps) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
 
   const isOverview = pathname === "/admin";
   const isAreas = pathname.startsWith("/admin/academic-areas");
@@ -68,25 +80,22 @@ export default function AdminSidebar({ role, email }: AdminSidebarProps) {
 
   return (
     <>
-      {/* Mobile Sticky Top Header */}
-      <div className="md:hidden bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between shadow-xs sticky top-0 z-30">
+      {/* Mobile Top App Bar */}
+      <div className="md:hidden bg-white border-b border-border px-4 h-16 flex items-center justify-between shadow-xs sticky top-0 z-30">
         <Link href="/admin" className="flex items-center gap-2">
           <Image
             src="/logo-desktop.svg"
             alt="Vetulan Service"
-            width={44}
-            height={44}
-            className="h-10 w-auto object-contain"
+            width={160}
+            height={40}
+            className="h-12 sm:h-14 object-contain"
             priority
           />
-          <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-700 px-1.5 py-0.5 rounded border border-slate-200 ml-1">
-            CMS
-          </span>
         </Link>
         <button
           type="button"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="p-1.5 rounded-md text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          className="p-2 rounded-xl text-text-secondary hover:bg-surface-subtle focus-ring cursor-pointer"
           aria-label={mobileMenuOpen ? "Close sidebar menu" : "Open sidebar menu"}
           aria-expanded={mobileMenuOpen}
         >
@@ -98,33 +107,110 @@ export default function AdminSidebar({ role, email }: AdminSidebarProps) {
         </button>
       </div>
 
-      {/* Main Desktop & Collapsible Mobile Sidebar */}
+      {/* Mobile Slide-in Drawer (When mobileMenuOpen) */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 md:hidden flex">
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-slate-900/30 backdrop-blur-xs"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+
+          {/* Drawer Box */}
+          <div className="relative w-4/5 max-w-xs bg-white h-full flex flex-col justify-between p-5 z-10 shadow-float animate-in slide-in-from-left duration-200">
+            <div>
+              <div className="flex items-center justify-between pb-4 border-b border-border">
+                <div className="flex items-center gap-2">
+                  <Image
+                    src="/logo-mobile.svg"
+                    alt="Vetulan"
+                    width={32}
+                    height={32}
+                    className="h-8 w-8 object-contain"
+                  />
+                  <span className="font-bold text-sm text-foreground">CMS Workspace</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-1.5 rounded-lg text-text-secondary hover:bg-surface-subtle cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="py-4 space-y-1">
+                {navItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${item.isActive
+                        ? "bg-primary-subtle text-primary border border-primary/20"
+                        : "text-text-secondary hover:bg-surface-subtle hover:text-foreground"
+                        }`}
+                    >
+                      <Icon className="w-4 h-4" />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-border space-y-2">
+              <Link
+                href="/"
+                target="_blank"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-between w-full px-3 py-2 rounded-xl text-xs font-semibold text-text-secondary hover:bg-surface-subtle"
+              >
+                <span>View Public Platform</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </Link>
+              <form action="/auth/signout" method="post">
+                <button
+                  type="submit"
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-error hover:bg-red-50 text-left cursor-pointer"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span>Sign Out</span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Main Desktop Sidebar */}
       <aside
         id="cms-tour-sidebar"
-        className={`${mobileMenuOpen ? "flex" : "hidden"
-          } md:flex w-full md:w-64 bg-slate-50/90 flex-col justify-between border-b md:border-b-0 md:border-r border-slate-200 shrink-0 z-20 md:sticky md:top-0 md:h-screen`}
+        className="hidden md:flex w-64 bg-white flex-col justify-between border-r border-border shrink-0 z-20 sticky top-0 h-screen shadow-2xs"
       >
         <div className="overflow-y-auto">
           {/* Desktop Brand Header */}
-          <div className="hidden md:flex h-16 px-5 items-center justify-between border-b border-slate-200 bg-white">
+          <div className="h-16 px-5 flex items-center justify-between border-b border-border bg-white">
             <Link href="/admin" className="flex items-center gap-2">
               <Image
                 src="/logo-desktop.svg"
                 alt="Vetulan Service"
-                width={168}
+                width={160}
                 height={40}
                 className="h-12 w-auto object-contain"
                 priority
               />
             </Link>
-            <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-700 border border-slate-200/80 px-1.5 py-0.5 rounded">
+            <span className="text-[10px] font-bold uppercase tracking-wider bg-primary-subtle text-primary border border-primary/20 px-2 py-0.5 rounded-full">
               CMS
             </span>
           </div>
 
           {/* Navigation Links */}
-          <div className="p-3 sm:p-4 space-y-1">
-            <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+          <div className="p-4 space-y-1.5">
+            <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
               Workspace
             </div>
 
@@ -134,14 +220,13 @@ export default function AdminSidebar({ role, email }: AdminSidebarProps) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${item.isActive
-                    ? "bg-sky-50 text-sky-800 font-semibold border border-sky-100"
-                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                  className={`flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-semibold transition-all ${item.isActive
+                    ? "bg-primary-subtle text-primary border border-primary/20 shadow-2xs"
+                    : "text-text-secondary hover:bg-surface-subtle hover:text-foreground"
                     }`}
                 >
                   <Icon
-                    className={`w-4 h-4 ${item.isActive ? "text-primary" : "text-slate-400"
+                    className={`w-4 h-4 ${item.isActive ? "text-primary" : "text-muted-foreground"
                       }`}
                   />
                   <span>{item.label}</span>
@@ -152,10 +237,10 @@ export default function AdminSidebar({ role, email }: AdminSidebarProps) {
         </div>
 
         {/* User Footer Profile & Actions */}
-        <div className="p-4 border-t border-slate-200 bg-white space-y-3">
-          <div className="px-3 py-2 bg-slate-50 rounded-lg border border-slate-200/80">
+        <div className="p-4 border-t border-border bg-surface-subtle/50 space-y-3">
+          <div className="px-3.5 py-2.5 bg-white rounded-2xl border border-border shadow-2xs">
             <p
-              className="text-xs font-semibold text-slate-800 truncate"
+              className="text-xs font-bold text-foreground truncate"
               title={email}
             >
               {email}
@@ -171,19 +256,19 @@ export default function AdminSidebar({ role, email }: AdminSidebarProps) {
             <Link
               href="/"
               target="_blank"
-              className="flex items-center justify-between w-full px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+              className="flex items-center justify-between w-full px-3 py-2 rounded-xl text-xs font-semibold text-text-secondary hover:bg-white hover:text-primary transition-colors"
             >
               <span className="flex items-center gap-1.5">
-                <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+                <ExternalLink className="w-3.5 h-3.5 text-muted-foreground" />
                 <span>View Public Platform</span>
               </span>
-              <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+              <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
             </Link>
 
             <form action="/auth/signout" method="post">
               <button
                 type="submit"
-                className="w-full flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-red-600 hover:bg-red-50 transition-colors text-left"
+                className="w-full flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-error hover:bg-rose-50 transition-colors text-left cursor-pointer"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span>Sign Out</span>

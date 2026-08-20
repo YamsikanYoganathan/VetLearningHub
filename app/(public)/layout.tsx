@@ -12,7 +12,7 @@ export default async function PublicLayout({
   const areas = await getAcademicAreas();
 
   return (
-    <div className="flex flex-col min-h-screen bg-white text-text-primary">
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
       <Header areas={areas} />
       <main className="flex-grow relative">{children}</main>
       <Footer />

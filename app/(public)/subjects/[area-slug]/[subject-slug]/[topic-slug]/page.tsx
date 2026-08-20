@@ -68,7 +68,7 @@ export default async function TopicPage({
       {/* Breadcrumb */}
       <Breadcrumb
         items={[
-          { label: "Academic Directory", href: "/subjects" },
+          { label: "Syllabus Directory", href: "/subjects" },
           { label: area.name, href: `/subjects/${area.slug}` },
           {
             label: subject.name,
@@ -81,15 +81,15 @@ export default async function TopicPage({
 
       {/* Editorial Header */}
       <div className="max-w-3xl mb-12">
-        <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-teal-50 text-teal-800 border border-teal-100 text-xs font-semibold tracking-tight mb-4">
-          <Hash className="w-3.5 h-3.5 text-teal-600" />
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-subtle text-secondary border border-secondary/20 text-xs font-semibold tracking-tight mb-4 shadow-2xs">
+          <Hash className="w-3.5 h-3.5" />
           <span>Topic Study Module</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight mb-3">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground tracking-tight mb-4">
           {topic.name}
         </h1>
         {topic.description && (
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+          <p className="text-base sm:text-lg text-text-secondary leading-relaxed">
             {topic.description}
           </p>
         )}
@@ -97,11 +97,11 @@ export default async function TopicPage({
 
       {/* Notes List */}
       <section>
-        <div className="flex items-center justify-between border-b border-slate-200 pb-3 mb-6">
-          <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <div className="flex items-center justify-between border-b border-border pb-3 mb-6">
+          <h2 className="text-xl font-bold text-foreground tracking-tight">
             Reference Notes & Clinical Protocols
           </h2>
-          <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded-md border border-slate-200/60">
+          <span className="text-xs font-semibold text-text-secondary bg-surface-subtle px-2.5 py-1 rounded-md border border-border">
             {notes.length} {notes.length === 1 ? "Note" : "Notes"}
           </span>
         </div>
@@ -132,12 +132,12 @@ export default async function TopicPage({
             ))}
           </div>
         ) : (
-          <div className="text-center py-16 border border-slate-200 border-dashed rounded-xl bg-slate-50 text-slate-500 text-sm">
-            <FileText className="w-10 h-10 text-slate-400 mx-auto mb-3" />
-            <p className="font-medium text-slate-700">
+          <div className="text-center py-16 border border-border border-dashed rounded-2xl bg-surface-subtle text-muted-foreground text-sm">
+            <FileText className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+            <p className="font-medium text-foreground">
               No published notes in this topic yet
             </p>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Check back soon for updated clinical protocols.
             </p>
           </div>

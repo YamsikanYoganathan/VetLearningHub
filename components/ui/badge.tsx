@@ -6,14 +6,14 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const badgeVariants = {
-  default: "border-slate-200 bg-slate-100 text-slate-700",
-  neutral: "border-slate-200 bg-slate-50 text-slate-600",
-  primary: "border-sky-200/80 bg-sky-50 text-sky-700",
-  secondary: "border-teal-200/80 bg-teal-50 text-teal-700",
-  outline: "border-slate-200 bg-transparent text-slate-600",
-  success: "border-emerald-200/80 bg-emerald-50 text-emerald-700",
-  warning: "border-amber-200/80 bg-amber-50 text-amber-700",
-  error: "border-rose-200/80 bg-rose-50 text-rose-700",
+  default: "border-border bg-surface-subtle text-foreground",
+  neutral: "border-border bg-surface-subtle/80 text-muted-foreground",
+  primary: "border-primary/25 bg-primary-subtle text-primary font-semibold",
+  secondary: "border-secondary/25 bg-secondary-subtle text-secondary font-semibold",
+  outline: "border-border bg-transparent text-text-secondary",
+  success: "border-emerald-500/25 bg-emerald-50 text-emerald-700 font-semibold",
+  warning: "border-amber-500/25 bg-amber-50 text-amber-800 font-semibold",
+  error: "border-rose-500/25 bg-rose-50 text-rose-700 font-semibold",
 }
 
 function Badge({ className, variant = "default", ...props }: BadgeProps) {

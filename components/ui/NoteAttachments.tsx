@@ -1,5 +1,5 @@
 import React from "react";
-import { FileText, Download, ExternalLink, Paperclip } from "lucide-react";
+import { Download, Paperclip } from "lucide-react";
 import { DocumentAttachment } from "@/app/admin/(protected)/actions/upload";
 
 function formatFileSize(bytes: number): string {
@@ -27,13 +27,13 @@ export function NoteAttachments({ attachments, className = "" }: NoteAttachments
   }
 
   return (
-    <section aria-labelledby="attached-resources-heading" className={"mt-10 pt-6 border-t border-slate-200 " + className}>
-      <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-800 mb-3">
-        <Paperclip className="w-4 h-4 text-teal-600" />
+    <section aria-labelledby="attached-resources-heading" className={"mt-10 pt-6 border-t border-border/80 " + className}>
+      <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-foreground mb-3.5">
+        <Paperclip className="w-4 h-4 text-secondary" />
         <h2 id="attached-resources-heading">Attached Study Resources & Documents ({attachments.length})</h2>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
         {attachments.map((file, idx) => {
           const ext = getFileExtension(file.name);
           const isPdf = ext === "PDF";
@@ -41,24 +41,24 @@ export function NoteAttachments({ attachments, className = "" }: NoteAttachments
           return (
             <div
               key={file.id || idx}
-              className="flex items-center justify-between p-3 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-slate-50 hover:border-slate-300 transition-all group"
+              className="flex items-center justify-between p-3.5 rounded-xl border border-border/80 bg-white hover:border-sky-300 transition-all shadow-2xs group"
             >
               <div className="flex items-center gap-3 min-w-0 pr-2">
                 <div
                   className={"w-9 h-9 rounded-lg flex items-center justify-center shrink-0 font-bold text-[11px] " + (
                     isPdf
-                      ? "bg-rose-100 text-rose-700 border border-rose-200"
-                      : "bg-sky-100 text-sky-700 border border-sky-200"
+                      ? "bg-rose-50 text-rose-700 border border-rose-200"
+                      : "bg-primary-subtle text-primary border border-primary/20"
                   )}
                 >
                   {ext}
                 </div>
 
                 <div className="min-w-0">
-                  <p className="text-xs font-semibold text-slate-800 truncate group-hover:text-primary transition-colors" title={file.name}>
+                  <p className="text-xs font-semibold text-foreground truncate group-hover:text-primary transition-colors" title={file.name}>
                     {file.name}
                   </p>
-                  <p className="text-[11px] text-slate-500 font-medium">
+                  <p className="text-[11px] text-muted-foreground font-medium">
                     {formatFileSize(file.size)}
                   </p>
                 </div>
@@ -69,7 +69,7 @@ export function NoteAttachments({ attachments, className = "" }: NoteAttachments
                 target="_blank"
                 rel="noopener noreferrer"
                 download={file.name}
-                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 hover:text-primary text-slate-700 text-xs font-medium transition-colors shrink-0 shadow-2xs"
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-border bg-surface-subtle hover:bg-white hover:text-primary text-text-secondary text-xs font-semibold transition-colors shrink-0 shadow-2xs"
                 title={"Download " + file.name}
                 aria-label={"Download " + file.name}
               >

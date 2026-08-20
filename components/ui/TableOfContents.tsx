@@ -59,22 +59,22 @@ export function TableOfContents({ items, className, isMobile = false }: TableOfC
   // Mobile Accordion View
   if (isMobile) {
     return (
-      <div className={cn("border border-slate-200 rounded-lg bg-slate-50/80 mb-6", className)}>
+      <div className={cn("border border-border rounded-xl bg-surface-subtle/80 mb-6", className)}>
         <button
           type="button"
           onClick={() => setIsMobileOpen((prev) => !prev)}
-          className="w-full flex items-center justify-between px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-700"
+          className="w-full flex items-center justify-between px-4 py-3 text-xs font-semibold uppercase tracking-wider text-text-secondary cursor-pointer"
           aria-expanded={isMobileOpen}
         >
           <span className="flex items-center gap-2">
-            <ListFilter className="w-3.5 h-3.5 text-sky-600" />
+            <ListFilter className="w-3.5 h-3.5 text-primary" />
             <span>Table of Contents ({items.length} sections)</span>
           </span>
           <ChevronDown className={cn("w-4 h-4 transition-transform duration-200", isMobileOpen ? "rotate-180" : "")} />
         </button>
 
         {isMobileOpen && (
-          <nav aria-label="Table of contents mobile" className="px-4 pb-4 pt-1 border-t border-slate-200/80">
+          <nav aria-label="Table of contents mobile" className="px-4 pb-4 pt-1 border-t border-border">
             <ul className="space-y-2 text-sm">
               {items.map((item) => {
                 const isActive = activeId === item.id;
@@ -84,8 +84,8 @@ export function TableOfContents({ items, className, isMobile = false }: TableOfC
                       type="button"
                       onClick={() => handleScrollTo(item.id)}
                       className={cn(
-                        "text-left text-xs py-1 transition-colors block w-full truncate",
-                        isActive ? "text-primary font-semibold" : "text-slate-600 hover:text-slate-900"
+                        "text-left text-xs py-1 transition-colors block w-full truncate cursor-pointer",
+                        isActive ? "text-primary font-semibold" : "text-text-secondary hover:text-foreground"
                       )}
                     >
                       {item.text}
@@ -102,13 +102,13 @@ export function TableOfContents({ items, className, isMobile = false }: TableOfC
 
   // Desktop Sticky Sidebar View
   return (
-    <nav aria-label="Table of contents" className={cn("space-y-3", className)}>
-      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-500 pb-2 border-b border-slate-200">
-        <ListFilter className="w-3.5 h-3.5 text-sky-600" />
+    <nav aria-label="Table of contents" className={cn("space-y-3 select-none", className)}>
+      <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground pb-2 border-b border-border">
+        <ListFilter className="w-3.5 h-3.5 text-primary" />
         <span>On this page</span>
       </div>
 
-      <ul className="space-y-1.5 text-xs">
+      <ul className="space-y-1 text-xs">
         {items.map((item) => {
           const isActive = activeId === item.id;
           return (
@@ -120,10 +120,10 @@ export function TableOfContents({ items, className, isMobile = false }: TableOfC
                 type="button"
                 onClick={() => handleScrollTo(item.id)}
                 className={cn(
-                  "text-left py-1 px-2 rounded-md transition-all block w-full leading-snug truncate",
+                  "text-left py-1.5 px-2.5 rounded-lg transition-all block w-full leading-snug truncate cursor-pointer",
                   isActive
-                    ? "bg-sky-50 text-sky-800 font-semibold border-l-2 border-primary"
-                    : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
+                    ? "bg-primary-subtle text-primary font-semibold border-l-2 border-primary"
+                    : "text-muted-foreground hover:text-foreground hover:bg-surface-subtle"
                 )}
               >
                 {item.text}

@@ -77,14 +77,13 @@ export function OnboardingTour() {
     try {
       const isCompleted = localStorage.getItem(ONBOARDING_STORAGE_KEY);
       if (!isCompleted) {
-        // Automatically present welcome tour to first-time visitor after gentle delay
         const timer = setTimeout(() => {
           setIsOpen(true);
         }, 1200);
         return () => clearTimeout(timer);
       }
     } catch {
-      // LocalStorage unavailable (e.g. private browsing restriction)
+      // LocalStorage unavailable
     } finally {
       setHasCheckedStorage(true);
     }
@@ -154,12 +153,12 @@ export function OnboardingTour() {
 
   return (
     <>
-      {/* Floating Re-Open Tour Help Trigger (Fixed bottom right) */}
+      {/* Floating Re-Open Tour Help Trigger */}
       {!isOpen && (
         <button
           type="button"
           onClick={startTour}
-          className="fixed bottom-5 right-5 z-30 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/95 border border-slate-200/90 text-slate-600 hover:text-primary hover:border-slate-300 text-xs font-medium shadow-md hover:shadow-lg transition-all duration-150 backdrop-blur-xs"
+          className="fixed bottom-5 right-5 z-30 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white/95 border border-border text-text-secondary hover:text-primary hover:border-sky-300 text-xs font-semibold shadow-md hover:shadow-lg transition-all duration-150 backdrop-blur-md cursor-pointer"
           aria-label="Start platform tour"
           title="Take quick tour of Vetulan"
         >
@@ -168,12 +167,12 @@ export function OnboardingTour() {
         </button>
       )}
 
-      {/* Active Onboarding Tour Modal / Tooltip Card */}
+      {/* Active Onboarding Tour Modal */}
       {isOpen && (
         <div className="fixed inset-0 z-50 pointer-events-none flex items-end sm:items-center justify-center p-4 sm:p-6 animate-in fade-in duration-200">
           {/* Subtle Screen Dimmer */}
           <div
-            className="fixed inset-0 bg-slate-900/20 backdrop-blur-[1px] pointer-events-auto transition-opacity"
+            className="fixed inset-0 bg-slate-900/20 backdrop-blur-[2px] pointer-events-auto transition-opacity"
             onClick={handleClose}
             aria-hidden="true"
           />
@@ -183,19 +182,19 @@ export function OnboardingTour() {
             role="dialog"
             aria-modal="true"
             aria-label="Platform Tour"
-            className="relative pointer-events-auto w-full max-w-md bg-white rounded-2xl border border-slate-200 shadow-float p-6 sm:p-7 space-y-5 animate-in zoom-in-95 duration-200"
+            className="relative pointer-events-auto w-full max-w-md bg-white rounded-2xl border border-border/80 shadow-float p-6 sm:p-7 space-y-5 animate-in zoom-in-95 duration-200"
           >
-            {/* Card Header: Step counter & Close Button */}
-            <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-100">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-lg bg-sky-50 text-sky-700 flex items-center justify-center border border-sky-100">
-                  <IconComponent className="w-3.5 h-3.5 text-primary" />
+            {/* Card Header */}
+            <div className="flex items-center justify-between gap-3 pb-3 border-b border-border/80">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-primary-subtle text-primary flex items-center justify-center border border-primary/20 shadow-2xs">
+                  <IconComponent className="w-4 h-4 text-primary" />
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">
                     Welcome Tour
                   </span>
-                  <span className="text-xs font-semibold text-slate-700">
+                  <span className="text-xs font-semibold text-foreground">
                     Step {currentStepIndex + 1} of {TOUR_STEPS.length}
                   </span>
                 </div>
@@ -204,7 +203,7 @@ export function OnboardingTour() {
               <button
                 type="button"
                 onClick={handleClose}
-                className="p-1 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-surface-subtle transition-colors cursor-pointer"
                 aria-label="Skip and close tour"
               >
                 <X className="w-4 h-4" />
@@ -213,16 +212,16 @@ export function OnboardingTour() {
 
             {/* Step Body */}
             <div>
-              <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight mb-2">
+              <h3 className="text-base sm:text-lg font-bold text-foreground tracking-tight mb-2">
                 {currentStep.title}
               </h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">
                 {currentStep.description}
               </p>
             </div>
 
             {/* Step Indicators & Action Controls */}
-            <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+            <div className="flex items-center justify-between pt-3 border-t border-border/80">
               {/* Progress Dots */}
               <div className="flex items-center gap-1.5">
                 {TOUR_STEPS.map((_, i) => (
@@ -231,7 +230,7 @@ export function OnboardingTour() {
                     className={`h-1.5 rounded-full transition-all duration-200 ${
                       i === currentStepIndex
                         ? "w-5 bg-primary"
-                        : "w-1.5 bg-slate-200"
+                        : "w-1.5 bg-border"
                     }`}
                   />
                 ))}
@@ -245,7 +244,7 @@ export function OnboardingTour() {
                     variant="outline"
                     size="sm"
                     onClick={handlePrev}
-                    className="h-8 px-2.5 text-xs"
+                    className="h-8 px-3 text-xs rounded-xl"
                   >
                     <ChevronLeft className="w-3.5 h-3.5 mr-0.5" />
                     <span>Back</span>
@@ -256,7 +255,7 @@ export function OnboardingTour() {
                   type="button"
                   size="sm"
                   onClick={handleNext}
-                  className="h-8 px-3 text-xs bg-slate-900 text-white hover:bg-slate-800"
+                  className="h-8 px-3.5 text-xs bg-primary text-white hover:bg-primary-hover rounded-xl"
                 >
                   <span>
                     {currentStepIndex === TOUR_STEPS.length - 1
